@@ -133,93 +133,31 @@ This program uses a list to store colors and draws two overlapping, multi-colore
 
 ```kidcode
 set colors = ["red", "green", "orange", "blue", "black", "purple"]
-color colors[0]
-move forward 100
-turn right 120
-color colors[1]
-move forward 100
-turn right 120
-color colors[2]
-move forward 100
-turn right 120
+set i = 0
 
-turn right 30
+repeat 4
+    set i = 0
+    repeat 3
+        color colors[i]
+        move forward 100
+        turn right 120
+        set i = i + 1
+    end repeat
 
-color colors[3]
-move forward 100
-turn right 120
-color colors[4]
-move forward 100
-turn right 120
-color colors[5]
-move forward 100
-turn right 180
+    turn right 30
 
-color colors[0]
-move forward 100
-turn right 120
-color colors[1]
-move forward 100
-turn right 120
-color colors[2]
-move forward 100
-turn right 120
-
-turn right 30
-
-color colors[3]
-move forward 100
-turn right 120
-color colors[4]
-move forward 100
-turn right 120
-color colors[5]
-move forward 100
-turn right 180
-
-color colors[0]
-move forward 100
-turn right 120
-color colors[1]
-move forward 100
-turn right 120
-color colors[2]
-move forward 100
-turn right 120
-
-turn right 30
-
-color colors[3]
-move forward 100
-turn right 120
-color colors[4]
-move forward 100
-turn right 120
-color colors[5]
-move forward 100
-turn right 180
-
-color colors[0]
-move forward 100
-turn right 120
-color colors[1]
-move forward 100
-turn right 120
-color colors[2]
-move forward 100
-turn right 120
-
-turn right 30
-
-color colors[3]
-move forward 100
-turn right 120
-color colors[4]
-move forward 105
-turn right 120
-color colors[5]
-move forward 100
-turn right 180
+    set i = 3
+    repeat 3
+        color colors[i]
+        move forward 100
+        if i == 5
+            turn right 180
+        else
+            turn right 120
+        end if
+        set i = i + 1
+    end repeat
+end repeat
 
 ```
 
