@@ -1,0 +1,9 @@
+define test_func param1 param2
+    say param1
+    say param2
+end define
+
+set x = 10
+if x < 20
+    test_func x "hello"
+end if 

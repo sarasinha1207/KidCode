@@ -1,188 +1,117 @@
-# KidCode Visual Interpreter
+# KidCode Visual Interpreter 🎨
 
-A powerful, educational programming language and visual interpreter designed to teach programming concepts through visual feedback. KidCode allows users to control a character named "Cody" to draw shapes, create patterns, and learn programming fundamentals.
+**KidCode** is a powerful, educational programming language and visual interpreter designed to teach core programming concepts through instant visual feedback. With KidCode, you can control a turtle named "Cody" to draw shapes, create patterns, and learn programming fundamentals in an interactive and fun way.
 
-## Features
+The language is designed to be simple enough for beginners but powerful enough to create complex artwork, thanks to features like **variables, loops, conditionals, functions, and lists**.
+
+
+*(Suggestion: Replace the image URL above with a real screenshot of your application!)*
+
+## ✨ Features
 
 ### 🎯 Core Language Features
-- **Variables**: Store and manipulate values with `set` commands
-- **Arithmetic**: Full mathematical expressions with `+`, `-`, `*`, `/`
-- **Loops**: Repeat blocks of code with `repeat` statements
-- **Conditionals**: Make decisions with `if`/`else` statements
-- **String Operations**: Concatenate strings and display messages
+- **Variables**: Store and manipulate values with `set` commands.
+- **Arithmetic**: Full mathematical expressions with `+`, `-`, `*`, `/`.
+- **Loops**: Repeat blocks of code with `repeat` statements.
+- **Conditionals**: Make decisions with `if`/`else` statements.
+- **Functions**: Define your own reusable commands to create complex logic.
+- **Lists**: Store and access collections of data like colors or sizes.
+- **String Operations**: Concatenate strings and display messages.
 
-### 🎨 Visual Features
-- **Pen Control**: Lift and lower the pen with `pen up` and `pen down`
-- **Color Support**: Change drawing colors with `color` command
-- **Real-time Visualization**: Watch Cody move and draw in real-time
-- **Visual Feedback**: See the character rotate and move according to commands
+### 🎨 Visual & UI Features
+- **Real-time Visualization**: Watch Cody move and draw your designs in real-time.
+- **Pen Control**: Lift and lower the pen with `pen up` and `pen down`.
+- **Color Support**: Change drawing colors with the `color` command.
+- **Modern Code Editor**: Professional editing experience with syntax highlighting.
+- **File Management**: Open and save your KidCode scripts.
+- **Execution Control**: A `Stop` button to halt execution at any time.
+- **Clear Feedback**: An output panel displays messages and error diagnostics.
 
-### 🛠️ User Interface
-- **Modern Code Editor**: Syntax highlighting and professional editing experience
-- **File Management**: Open and save KidCode scripts
-- **Stop Button**: Halt execution at any time
-- **Error Handling**: Clear error messages for debugging
-- **Output Panel**: See program output and messages
+### 🔒 Safety & Performance
+- **Execution Timeout**: Protects against accidental infinite loops.
+- **Graceful Error Handling**: Clear, line-numbered syntax and runtime error messages.
+- **Responsive UI**: The UI remains responsive while code is executing.
 
-### 🔒 Safety Features
-- **Execution Timeout**: Automatic protection against infinite loops
-- **Error Recovery**: Graceful handling of syntax and runtime errors
-- **Thread Safety**: Responsive UI that doesn't freeze during execution
-
-## Installation & Running
+## 🚀 Getting Started
 
 ### Prerequisites
 - Java 17 or higher
-- Maven (for development)
+- Maven (for building from source)
 
-### Quick Start
-1. **Download the JAR file**: `kidcode-structured-1.0-SNAPSHOT-jar-with-dependencies.jar`
-2. **Run the application**:
+### Run the Application
+1. **Download the latest JAR file** from the project's releases page (e.g., `kidcode-structured-1.0-SNAPSHOT-jar-with-dependencies.jar`).
+2. Run the application from your terminal:
    ```bash
    java -jar kidcode-structured-1.0-SNAPSHOT-jar-with-dependencies.jar
    ```
-3. **Or double-click** the JAR file on most systems
 
-### From Source
+On most desktop systems, you can simply double-click the JAR file to run it.
+
+### Build from Source
 ```bash
+# Clone the repository
 git clone <repository-url>
-cd kidcode-structured
+cd sansi-28-kidcode
+
+# Build the project using Maven
 mvn clean package
+
+# Run the newly created JAR file
 java -jar target/kidcode-structured-1.0-SNAPSHOT-jar-with-dependencies.jar
 ```
 
-## Language Reference
+## 📚 Language Reference
 
 ### Basic Commands
-
 | Command | Syntax | Description |
 |---------|--------|-------------|
-| `move forward` | `move forward <number>` | Move Cody forward by the specified number of pixels |
-| `turn` | `turn left/right <degrees>` | Turn Cody left or right by the specified degrees |
-| `say` | `say "message"` | Display a message in the output panel |
+| move forward | `move forward <value>` | Moves Cody forward by a number of pixels. |
+| turn | `turn <left/right> <degrees>` | Turns Cody left or right. |
+| say | `say "message"` or `<variable>` | Displays a message in the output panel. |
+| pen | `pen <up/down>` | Lifts or lowers the drawing pen. |
+| color | `color "color_name"` | Changes the drawing color. |
 
-### Variables and Expressions
-
-| Command | Syntax | Description |
+### Variables & Expressions
+| Concept | Syntax | Description |
 |---------|--------|-------------|
-| `set` | `set variable = expression` | Assign a value to a variable |
-| Arithmetic | `5 + 3`, `x * 2`, `(10 - 5) / 2` | Mathematical expressions |
-| String Concatenation | `"Hello" + " " + "World"` | Combine strings |
+| set | `set variable = <expression>` | Assigns a value or expression to a variable. |
+| Arithmetic | `5 + 3`, `x * 2`, `(10 - 5) / 2` | Full support for mathematical expressions. |
+| Comparisons | `==`, `!=`, `>`, `<` | Used inside if conditions. |
+
+### Data Structures: Lists
+
+Lists allow you to store multiple values in a single variable. They are created with square brackets `[]`.
+
+| Operation | Syntax | Description |
+|-----------|--------|-------------|
+| Creation | `set my_list = [value1, value2, ...]` | Creates a new list. |
+| Access | `my_list[index]` | Gets an element from the list. Note: The first element is at index 0! |
+
+**Example:**
+```kidcode
+set colors = ["red", "green", "blue"]
+say colors[0] # says "red"
+color colors[1] # sets color to green
+```
 
 ### Control Flow
-
-| Command        | Syntax                        | Description                        |
-|----------------|-------------------------------|------------------------------------|
-| Repeat         | `repeat <n> ... end repeat`   | Loop n times                       |
-| If/Else        | `if ... else ... end if`      | Conditional execution              |
-
-### Functions
-
-| Command        | Syntax                        | Description                        |
-|----------------|-------------------------------|------------------------------------|
-| Define         | `define name param1 param2 ... end define` | Define a function |
-| Call           | `function_name arg1 arg2 ...` | Call a function                    |
-
-### Lists
-
-| Command        | Syntax                        | Description                        |
-|----------------|-------------------------------|------------------------------------|
-| List Literal   | `[item1, item2, item3]`       | Create a list                      |
-| Index Access   | `list[index]`                 | Access list element by index       |
-
-### Visual Commands
-
 | Command | Syntax | Description |
 |---------|--------|-------------|
-| `pen up` | `pen up` | Lift the pen (no drawing) |
-| `pen down` | `pen down` | Lower the pen (drawing enabled) |
-| `color` | `color "color_name"` | Change the drawing color |
+| repeat | `repeat <times> ... end repeat` | Executes a block of code multiple times. |
+| if | `if <condition> ... else ... end if` | Conditional execution. The else block is optional. |
 
-### Supported Colors
-- `red`, `green`, `blue`, `yellow`, `orange`, `purple`, `black`, `white`
+### Reusable Logic: Functions
 
-### Comparison Operators
-- `==` (equal), `!=` (not equal), `>` (greater than), `<` (less than)
+Functions let you define your own custom commands to build more complex and readable programs.
 
-## Example Programs
+| Operation | Syntax | Description |
+|-----------|--------|-------------|
+| Definition | `define <name> [param1] [param2] ... end define` | Creates a new command. Parameters are optional. |
+| Calling | `<name> [arg1] [arg2]` | Executes the function you defined. |
 
-### Simple Square
-```
-repeat 4
-    move forward 100
-    turn right 90
-end repeat
-```
-
-### Rainbow Spiral
-```
-set size = 10
-set colors = "red green blue yellow orange purple"
-
-repeat 20
-    color "red"
-    move forward size
-    turn right 90
-    set size = size + 5
-end repeat
-```
-
-### Interactive Drawing
-```
-set message = "Hello" + " " + "World"
-say message
-
-color "blue"
-pen down
-move forward 100
-turn right 90
-
-pen up
-move forward 50
-pen down
-
-color "green"
-move forward 100
-```
-
-### Conditional Pattern
-```
-set size = 20
-
-repeat 10
-    if size > 30
-        color "red"
-        say "Big shape!"
-    else
-        color "blue"
-        say "Small shape!"
-    end if
-    
-    move forward size
-    turn right 90
-    set size = size + 5
-end repeat
-```
-
-### Conditional Drawing
-```
-set size = 20
-repeat 10
-    if size > 30
-        color "red"
-        say "Big!"
-    else
-        color "blue"
-        say "Small!"
-    end if
-    move forward size
-    turn right 90
-    set size = size + 5
-end repeat
-```
-
-### Function Example
-```
+**Example:**
+```kidcode
+# Define a function to draw a square
 define draw_square size
     repeat 4
         move forward size
@@ -190,100 +119,119 @@ define draw_square size
     end repeat
 end define
 
+# Use the new command
 draw_square 50
 color "red"
 draw_square 100
 ```
 
-### List Example
-```
-set colors = ["red", "green", "blue"]
+## 💡 Example Programs
+
+### Colorful Starburst
+
+This program uses a list to store colors and draws two overlapping, multi-colored triangles to create a star-like shape.
+
+```kidcode
+set colors = ["red", "orange", "blue", "green", "purple", "black"]
+
+# Draw the first star using the first three colors
 color colors[0]
-move forward 50
+move forward 100
+turn right 120
 color colors[1]
-move forward 50
+move forward 100
+turn right 120
 color colors[2]
-move forward 50
+move forward 100
+turn right 120
+
+# Turn a bit to offset the next star
+turn right 30
+
+# Draw the second star using the next three colors
+color colors[3]
+move forward 100
+turn right 120
+color colors[4]
+move forward 100
+turn right 120
+color colors[5]
+move forward 100
+turn right 120
 ```
 
-### Combined Example
-```
-define draw_shape size color_name
-    color color_name
+### A Village of Houses (using a function)
+
+This example shows the power of functions by defining a house command and then using it to draw a row of houses.
+
+```kidcode
+# Define a reusable function to draw one house
+define house size
+    # --- Draw the square base ---
+    pen down
+    color "blue"
+    repeat 4
+        move forward size
+        turn right 90
+    end repeat
+
+    # --- Draw the triangle roof ---
+    color "red"
     move forward size
-    turn right 90
+    turn left 30
+    move forward size
+    turn right 120
+    move forward size
+    turn right 120
+    move forward size
+
+    # --- Reset position for the next house ---
+    pen up
+    turn right 150
+    move forward size
+    move forward 20
+    pen down
 end define
 
-set colors = ["blue", "green", "red"]
-set length = 20
+# --- Main Program ---
+# Go to the starting position on the left
+pen up
+turn left 180
+move forward 200
+turn right 90
+move forward 150
+turn right 90
 
-repeat 15
-    if length < 50
-        draw_shape length colors[0]
-    else
-        draw_shape length colors[2]
-    end if
-    set length = length + 5
-end repeat
+# Draw three houses of different sizes
+house 50
+house 75
+house 60
 ```
 
-## Architecture
+## 🏛️ Architecture
 
-KidCode is built with a clean, modular architecture:
+KidCode is built with a clean, modular architecture that processes source code in several stages:
 
-- **Lexer**: Tokenizes source code into meaningful units
-- **Parser**: Builds an Abstract Syntax Tree (AST) from tokens
-- **Evaluator**: Executes the AST and manages program state
-- **GUI**: Provides the user interface and visual feedback
+1. **Lexer**: Tokenizes the source code into a stream of meaningful units (e.g., MOVE, NUMBER, IDENTIFIER).
+2. **Parser**: Constructs an Abstract Syntax Tree (AST) from the token stream, representing the program's structure.
+3. **Evaluator**: Traverses the AST to execute the program, manage state (variables, functions, Cody's position), and trigger visual updates.
+4. **GUI**: Provides the user interface, code editor, and the drawing canvas that visualizes the evaluator's output.
 
-### Key Components
-- `KidCodeEngine`: Main orchestrator that coordinates lexing, parsing, and evaluation
-- `Environment`: Manages program state (variables, position, pen state, colors)
-- `DrawingPanel`: Handles visual rendering of Cody and the drawing canvas
+## 🤝 Contributing
 
-## Development
+Contributions are welcome! If you'd like to help improve KidCode, please follow these steps:
 
-### Project Structure
-```
-kidcode-structured/
-├── src/main/java/com/kidcode/
-│   ├── core/
-│   │   ├── lexer/          # Tokenization
-│   │   ├── parser/         # AST construction
-│   │   ├── ast/           # Abstract Syntax Tree nodes
-│   │   └── evaluator/     # Program execution
-│   ├── gui/               # User interface
-│   └── cli/               # Command-line interface
-├── src/test/              # Unit tests
-└── pom.xml               # Maven configuration
-```
+1. Fork the repository.
+2. Create a new feature branch (`git checkout -b feature/amazing-new-feature`).
+3. Make your changes and commit them (`git commit -m 'Add some amazing feature'`).
+4. Push to the branch (`git push origin feature/amazing-new-feature`).
+5. Open a Pull Request.
 
-### Building
-```bash
-mvn clean compile          # Compile only
-mvn clean test            # Run tests
-mvn clean package         # Create JAR files
-mvn exec:java            # Run with Maven
-```
-
-## Contributing
-
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Add tests for new features
-5. Submit a pull request
-
-## License
+## 📄 License
 
 This project is open source and available under the MIT License.
 
-## Acknowledgments
-
-- Built with Java 17 and Swing for cross-platform compatibility
-- Uses RSyntaxTextArea for enhanced code editing
-- Maven for build management and dependency resolution
-
 ---
 
+**Happy Coding with KidCode!** 🎨✨ 
 **Happy Coding with KidCode!** 🎨✨ 

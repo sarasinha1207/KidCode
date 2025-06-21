@@ -1,0 +1,9 @@
+say "Debug test"
+
+define test_func
+    repeat 2
+        say "Hello"
+    end repeat
+end define
+
+test_func 

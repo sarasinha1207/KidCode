@@ -1,0 +1,7 @@
+say "Simple test"
+
+define test_func
+    say "Hello from function"
+end define
+
+test_func 

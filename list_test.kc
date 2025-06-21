@@ -1,0 +1,6 @@
+say "List test"
+
+set colors = ["red", "green", "blue"]
+say colors[0]
+say colors[1]
+say colors[2] 

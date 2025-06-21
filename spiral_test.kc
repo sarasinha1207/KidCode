@@ -1,0 +1,16 @@
+define draw_shape size color_name
+    color color_name
+    move forward size
+    turn right 90
+end define
+
+set colors = ["blue", "green", "red", "orange"]
+set length = 20
+repeat 20
+    if length < 50
+        draw_shape length colors[0]
+    else
+        draw_shape length colors[2]
+    end if
+    set length = length + 5
+end repeat

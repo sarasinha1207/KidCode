@@ -1,0 +1,4 @@
+set x = 10
+say x
+say "x is"
+say x 

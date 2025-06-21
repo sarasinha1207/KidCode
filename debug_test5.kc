@@ -1,0 +1,11 @@
+say "Starting test"
+
+define simple_func
+    say "hello"
+end define
+
+say "Function defined"
+
+simple_func
+
+say "Test complete" 

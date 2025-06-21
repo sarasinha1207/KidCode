@@ -1,0 +1,4 @@
+set x = 10
+if x < 20
+    say "x is less than 20"
+end if 

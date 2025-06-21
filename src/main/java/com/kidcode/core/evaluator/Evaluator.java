@@ -66,6 +66,9 @@ public class Evaluator {
             env.defineFunction(funcDefStmt.name().value(), funcDefStmt);
         } else if (stmt instanceof FunctionCallStatement funcCallStmt) {
             evaluateFunctionCall(funcCallStmt, env);
+        } else if (stmt instanceof ExpressionStatement exprStmt) {
+            // Evaluate the expression but ignore the result (for standalone variable references)
+            evaluateExpression(exprStmt.expression(), env);
         }
     }
 
