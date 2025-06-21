@@ -132,9 +132,7 @@ draw_square 100
 This program uses a list to store colors and draws two overlapping, multi-colored triangles to create a star-like shape.
 
 ```kidcode
-set colors = ["red", "orange", "blue", "green", "purple", "black"]
-
-# Draw the first star using the first three colors
+set colors = ["red", "green", "orange", "blue", "black", "purple"]
 color colors[0]
 move forward 100
 turn right 120
@@ -145,10 +143,8 @@ color colors[2]
 move forward 100
 turn right 120
 
-# Turn a bit to offset the next star
 turn right 30
 
-# Draw the second star using the next three colors
 color colors[3]
 move forward 100
 turn right 120
@@ -157,7 +153,74 @@ move forward 100
 turn right 120
 color colors[5]
 move forward 100
+turn right 180
+
+color colors[0]
+move forward 100
 turn right 120
+color colors[1]
+move forward 100
+turn right 120
+color colors[2]
+move forward 100
+turn right 120
+
+turn right 30
+
+color colors[3]
+move forward 100
+turn right 120
+color colors[4]
+move forward 100
+turn right 120
+color colors[5]
+move forward 100
+turn right 180
+
+color colors[0]
+move forward 100
+turn right 120
+color colors[1]
+move forward 100
+turn right 120
+color colors[2]
+move forward 100
+turn right 120
+
+turn right 30
+
+color colors[3]
+move forward 100
+turn right 120
+color colors[4]
+move forward 100
+turn right 120
+color colors[5]
+move forward 100
+turn right 180
+
+color colors[0]
+move forward 100
+turn right 120
+color colors[1]
+move forward 100
+turn right 120
+color colors[2]
+move forward 100
+turn right 120
+
+turn right 30
+
+color colors[3]
+move forward 100
+turn right 120
+color colors[4]
+move forward 105
+turn right 120
+color colors[5]
+move forward 100
+turn right 180
+
 ```
 
 ### A Village of Houses (using a function)
@@ -165,47 +228,60 @@ turn right 120
 This example shows the power of functions by defining a house command and then using it to draw a row of houses.
 
 ```kidcode
-# Define a reusable function to draw one house
 define house size
-    # --- Draw the square base ---
     pen down
     color "blue"
     repeat 4
         move forward size
         turn right 90
     end repeat
-
-    # --- Draw the triangle roof ---
+    
+    pen up
+    
     color "red"
     move forward size
-    turn left 30
+
+    pen down
+    turn right 30
     move forward size
     turn right 120
     move forward size
     turn right 120
     move forward size
 
-    # --- Reset position for the next house ---
     pen up
-    turn right 150
-    move forward size
-    move forward 20
+    turn left 90
+    move forward size/2
+    turn left 90
+    move forward size/3
+ 
+    pen down
+    move forward size/3
+    turn right 90
+    move forward size/2
+    turn right 90
+    move forward size/3
+    turn right 90
+    move forward size/2
+
+    pen up
+    turn right 90
+    move forward size*2
+    turn right 90
+    move forward size/2
+    turn left 180
     pen down
 end define
 
-# --- Main Program ---
-# Go to the starting position on the left
-pen up
-turn left 180
-move forward 200
-turn right 90
-move forward 150
-turn right 90
 
-# Draw three houses of different sizes
-house 50
-house 75
 house 60
+
+say "house 1"
+
+house 90
+
+say "house 2"
+
 ```
 
 ## 🏛️ Architecture
