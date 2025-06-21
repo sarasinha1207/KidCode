@@ -71,10 +71,24 @@ java -jar target/kidcode-structured-1.0-SNAPSHOT-jar-with-dependencies.jar
 
 ### Control Flow
 
-| Command | Syntax | Description |
-|---------|--------|-------------|
-| `repeat` | `repeat <times> ... end repeat` | Execute a block of code multiple times |
-| `if` | `if condition ... else ... end if` | Conditional execution |
+| Command        | Syntax                        | Description                        |
+|----------------|-------------------------------|------------------------------------|
+| Repeat         | `repeat <n> ... end repeat`   | Loop n times                       |
+| If/Else        | `if ... else ... end if`      | Conditional execution              |
+
+### Functions
+
+| Command        | Syntax                        | Description                        |
+|----------------|-------------------------------|------------------------------------|
+| Define         | `define name param1 param2 ... end define` | Define a function |
+| Call           | `function_name arg1 arg2 ...` | Call a function                    |
+
+### Lists
+
+| Command        | Syntax                        | Description                        |
+|----------------|-------------------------------|------------------------------------|
+| List Literal   | `[item1, item2, item3]`       | Create a list                      |
+| Index Access   | `list[index]`                 | Access list element by index       |
 
 ### Visual Commands
 
@@ -147,6 +161,69 @@ repeat 10
     move forward size
     turn right 90
     set size = size + 5
+end repeat
+```
+
+### Conditional Drawing
+```
+set size = 20
+repeat 10
+    if size > 30
+        color "red"
+        say "Big!"
+    else
+        color "blue"
+        say "Small!"
+    end if
+    move forward size
+    turn right 90
+    set size = size + 5
+end repeat
+```
+
+### Function Example
+```
+define draw_square size
+    repeat 4
+        move forward size
+        turn right 90
+    end repeat
+end define
+
+draw_square 50
+color "red"
+draw_square 100
+```
+
+### List Example
+```
+set colors = ["red", "green", "blue"]
+color colors[0]
+move forward 50
+color colors[1]
+move forward 50
+color colors[2]
+move forward 50
+```
+
+### Combined Example
+```
+define draw_shape size color_name
+    color color_name
+    move forward size
+    turn right 90
+end define
+
+set colors = ["blue", "green", "red"]
+set length = 20
+
+repeat 15
+    if length < 50
+        draw_shape length colors[0]
+    else
+        draw_shape length colors[2]
+    end if
+    set length = length + 5
 end repeat
 ```
 

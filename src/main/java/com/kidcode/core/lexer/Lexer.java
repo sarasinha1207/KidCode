@@ -30,6 +30,7 @@ public class Lexer {
         keywords.put("up", TokenType.UP);
         keywords.put("down", TokenType.DOWN);
         keywords.put("color", TokenType.COLOR);
+        keywords.put("define", TokenType.DEFINE);
     }
 
     public Lexer(String input) {
@@ -76,6 +77,9 @@ public class Lexer {
             case '/': token = new Token(TokenType.SLASH, String.valueOf(ch), lineNumber); break;
             case '(': token = new Token(TokenType.LPAREN, String.valueOf(ch), lineNumber); break;
             case ')': token = new Token(TokenType.RPAREN, String.valueOf(ch), lineNumber); break;
+            case '[': token = new Token(TokenType.LBRACKET, String.valueOf(ch), lineNumber); break;
+            case ']': token = new Token(TokenType.RBRACKET, String.valueOf(ch), lineNumber); break;
+            case ',': token = new Token(TokenType.COMMA, String.valueOf(ch), lineNumber); break;
             case '"':
                 token = new Token(TokenType.STRING, readString(), lineNumber);
                 break;

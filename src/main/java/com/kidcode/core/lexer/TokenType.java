@@ -18,6 +18,10 @@ public enum TokenType {
     GT, LT, EQ, NOT_EQ, // Comparison operators
     PEN, UP, DOWN, COLOR, // Pen and color commands
 
+    // NEW for functions and lists
+    DEFINE,
+    LBRACKET, RBRACKET, COMMA
+
     // Additional commands
     // Add any other commands or keywords here
 } 

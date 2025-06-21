@@ -16,7 +16,8 @@ public class Parser {
         LESSGREATER, // >, <
         SUM,     // + -
         PRODUCT, // * /
-        PREFIX   // -X
+        PREFIX,  // -X
+        INDEX    // array[index]
     }
     private static final Map<TokenType, Precedence> precedences = new HashMap<>();
     static {
@@ -28,6 +29,7 @@ public class Parser {
         precedences.put(TokenType.MINUS, Precedence.SUM);
         precedences.put(TokenType.STAR, Precedence.PRODUCT);
         precedences.put(TokenType.SLASH, Precedence.PRODUCT);
+        precedences.put(TokenType.LBRACKET, Precedence.INDEX);
     }
 
     public Parser(Lexer lexer) {
@@ -78,6 +80,8 @@ public class Parser {
             case IF: return parseIfStatement();
             case PEN: return parsePenStatement();
             case COLOR: return parseSetColorStatement();
+            case DEFINE: return parseFunctionDefinitionStatement();
+            case IDENTIFIER: return parseFunctionCallStatement();
             default: return null;
         }
     }
@@ -187,22 +191,55 @@ public class Parser {
         return block;
     }
 
+    private List<Statement> parseBlock(String blockType) {
+        List<Statement> block = new ArrayList<>();
+        nextToken(); // Move to the first statement in the block
+        while (currentToken().type() != TokenType.END && currentToken().type() != TokenType.ELSE && currentToken().type() != TokenType.EOF) {
+            Statement stmt = parseStatement();
+            if (stmt != null) {
+                block.add(stmt);
+            }
+            nextToken();
+        }
+        return block;
+    }
+
     private Expression parseExpression(Precedence precedence) {
         Expression left = switch (currentToken().type()) {
             case IDENTIFIER -> new Identifier(currentToken().literal());
             case NUMBER -> new IntegerLiteral(Integer.parseInt(currentToken().literal()));
             case STRING -> new StringLiteral(currentToken().literal());
             case LPAREN -> parseGroupedExpression();
+            case LBRACKET -> parseListLiteral();
             default -> {
                 errors.add("Error line " + currentToken().lineNumber() + ": Unexpected token " + currentToken().literal() + " in expression");
                 yield null;
             }
         };
-        while (precedences.containsKey(peekToken().type()) && precedence.ordinal() < precedences.get(peekToken().type()).ordinal()) {
-            nextToken(); // Consume operator
-            left = parseInfixExpression(left);
+        
+        while (peekToken().type() != TokenType.EOF && precedence.ordinal() < getPeekPrecedence().ordinal()) {
+            TokenType peekType = peekToken().type();
+            if (peekType == TokenType.LBRACKET) {
+                nextToken();
+                left = parseIndexExpression(left);
+            } else if (isOperator(peekType)) {
+                nextToken(); // Consume operator
+                left = parseInfixExpression(left);
+            } else {
+                return left;
+            }
         }
         return left;
+    }
+
+    private boolean isOperator(TokenType type) {
+        return type == TokenType.PLUS || type == TokenType.MINUS || type == TokenType.STAR ||
+               type == TokenType.SLASH || type == TokenType.EQ || type == TokenType.NOT_EQ ||
+               type == TokenType.LT || type == TokenType.GT;
+    }
+
+    private Precedence getPeekPrecedence() {
+        return precedences.getOrDefault(peekToken().type(), Precedence.LOWEST);
     }
 
     private Expression parseInfixExpression(Expression left) {
@@ -242,5 +279,79 @@ public class Parser {
         nextToken(); // Move to the color expression
         Expression colorName = parseExpression(Precedence.LOWEST);
         return new SetColorStatement(colorName);
+    }
+
+    private FunctionDefinitionStatement parseFunctionDefinitionStatement() {
+        if (peekToken().type() != TokenType.IDENTIFIER) {
+            errors.add("Error line " + currentToken().lineNumber() + ": Expected function name after 'define'");
+            return null;
+        }
+        nextToken(); // Consume function name
+        Identifier name = new Identifier(currentToken().literal());
+
+        List<Identifier> parameters = new ArrayList<>();
+        // Parse parameters until the line breaks or block starts
+        while (peekToken().type() == TokenType.IDENTIFIER) {
+            nextToken();
+            parameters.add(new Identifier(currentToken().literal()));
+        }
+
+        List<Statement> body = parseBlock("define");
+        if (currentToken().type() != TokenType.END) {
+            errors.add("Error line " + currentToken().lineNumber() + ": Expected 'end define' to close function definition");
+            return null;
+        }
+        if (peekToken().type() == TokenType.DEFINE) {
+            nextToken(); // Consume 'define'
+        }
+        return new FunctionDefinitionStatement(name, parameters, body);
+    }
+
+    private FunctionCallStatement parseFunctionCallStatement() {
+        Identifier function = new Identifier(currentToken().literal());
+        List<Expression> arguments = new ArrayList<>();
+        
+        // Arguments can be numbers, variables, strings, or parenthesized expressions
+        while (peekToken().type() == TokenType.NUMBER ||
+               peekToken().type() == TokenType.IDENTIFIER ||
+               peekToken().type() == TokenType.STRING ||
+               peekToken().type() == TokenType.LPAREN) {
+            nextToken();
+            arguments.add(parseExpression(Precedence.LOWEST));
+        }
+
+        return new FunctionCallStatement(function, arguments);
+    }
+
+    private Expression parseListLiteral() {
+        List<Expression> elements = new ArrayList<>();
+        if (peekToken().type() == TokenType.RBRACKET) { // Handle empty list []
+            nextToken();
+            return new ListLiteral(elements);
+        }
+        nextToken();
+        elements.add(parseExpression(Precedence.LOWEST));
+        while (peekToken().type() == TokenType.COMMA) {
+            nextToken();
+            nextToken();
+            elements.add(parseExpression(Precedence.LOWEST));
+        }
+        if (peekToken().type() != TokenType.RBRACKET) {
+            errors.add("Error line " + currentToken().lineNumber() + ": Expected ']' to close list");
+            return null;
+        }
+        nextToken();
+        return new ListLiteral(elements);
+    }
+
+    private Expression parseIndexExpression(Expression left) {
+        nextToken(); // Consume '['
+        Expression index = parseExpression(Precedence.LOWEST);
+        if (peekToken().type() != TokenType.RBRACKET) {
+            errors.add("Error line " + currentToken().lineNumber() + ": Expected ']' to close index expression");
+            return null;
+        }
+        nextToken(); // Consume ']'
+        return new IndexExpression(left, index);
     }
 } 

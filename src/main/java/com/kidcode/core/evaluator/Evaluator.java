@@ -3,6 +3,7 @@ package com.kidcode.core.evaluator;
 import com.kidcode.core.ast.*;
 import java.awt.Color;
 import java.util.List;
+import java.util.ArrayList;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
@@ -61,6 +62,10 @@ public class Evaluator {
             evaluatePenStatement(penStmt, env);
         } else if (stmt instanceof SetColorStatement colorStmt) {
             evaluateSetColorStatement(colorStmt, env);
+        } else if (stmt instanceof FunctionDefinitionStatement funcDefStmt) {
+            env.defineFunction(funcDefStmt.name().value(), funcDefStmt);
+        } else if (stmt instanceof FunctionCallStatement funcCallStmt) {
+            evaluateFunctionCall(funcCallStmt, env);
         }
     }
 
@@ -163,6 +168,37 @@ public class Evaluator {
             }
             return "Error: Cannot perform operation '" + infix.operator() + "' on these types.";
         }
+        if (expr instanceof ListLiteral listLiteral) {
+            List<Object> elements = new ArrayList<>();
+            for (Expression el : listLiteral.elements()) {
+                Object evaluated = evaluateExpression(el, env);
+                if (isError(evaluated)) return evaluated;
+                elements.add(evaluated);
+            }
+            return elements;
+        }
+        if (expr instanceof IndexExpression indexExpr) {
+            Object left = evaluateExpression(indexExpr.left(), env);
+            if (isError(left)) return left;
+            
+            Object index = evaluateExpression(indexExpr.index(), env);
+            if (isError(index)) return index;
+            
+            if (!(left instanceof List)) {
+                return "Error: index operator [] cannot be used on non-list type.";
+            }
+            if (!(index instanceof Integer)) {
+                return "Error: index must be a number.";
+            }
+
+            List<Object> list = (List<Object>) left;
+            int idx = (Integer) index;
+
+            if (idx < 0 || idx >= list.size()) {
+                return "Error: index " + idx + " out of bounds for list of size " + list.size() + ".";
+            }
+            return list.get(idx);
+        }
         return "Error: Cannot evaluate expression";
     }
     
@@ -230,6 +266,42 @@ public class Evaluator {
             for (Statement bodyStmt : stmt.alternative()) {
                 evaluateStatement(bodyStmt, env);
             }
+        }
+    }
+
+    private void evaluateFunctionCall(FunctionCallStatement call, Environment env) {
+        FunctionDefinitionStatement funcDef = env.getFunction(call.function().value());
+        
+        if (funcDef == null) {
+            onSay.accept("Error: Function '" + call.function().value() + "' is not defined.");
+            return;
+        }
+        
+        if (call.arguments().size() != funcDef.parameters().size()) {
+            onSay.accept("Error: Function '" + funcDef.name().value() + "' expects " +
+                         funcDef.parameters().size() + " arguments, but got " + call.arguments().size() + ".");
+            return;
+        }
+
+        // 1. Create a new, scoped environment for the function
+        Environment functionEnv = new Environment(env);
+
+        // 2. Evaluate arguments in the *calling* environment and bind them to parameters in the *new* environment
+        for (int i = 0; i < funcDef.parameters().size(); i++) {
+            Identifier param = funcDef.parameters().get(i);
+            Expression arg = call.arguments().get(i);
+            Object argValue = evaluateExpression(arg, env);
+            if (isError(argValue)) {
+                onSay.accept((String) argValue);
+                return;
+            }
+            functionEnv.set(param.value(), argValue);
+        }
+
+        // 3. Execute the function body in the new, scoped environment
+        for (Statement bodyStatement : funcDef.body()) {
+            if (stopSignal.get()) return;
+            evaluateStatement(bodyStatement, functionEnv);
         }
     }
 }

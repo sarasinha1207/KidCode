@@ -1,0 +1,42 @@
+# Test script for functions and lists
+say "Testing functions and lists!"
+
+# Define a function to draw a square
+define draw_square size
+    repeat 4
+        move forward size
+        turn right 90
+    end repeat
+end define
+
+# Define a function to draw a triangle
+define draw_triangle size
+    repeat 3
+        move forward size
+        turn right 120
+    end repeat
+end define
+
+# Test function calls
+draw_square 50
+color "red"
+draw_square 80
+
+# Test lists
+set colors = ["blue", "green", "yellow", "orange"]
+set sizes = [30, 50, 70, 90]
+
+# Use lists with functions
+color colors[0]
+draw_triangle sizes[0]
+
+color colors[1]
+draw_triangle sizes[1]
+
+color colors[2]
+draw_triangle sizes[2]
+
+color colors[3]
+draw_triangle sizes[3]
+
+say "Functions and lists test completed!" 
