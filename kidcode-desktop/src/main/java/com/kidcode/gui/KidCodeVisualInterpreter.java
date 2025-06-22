@@ -2,6 +2,7 @@ package com.kidcode.gui;
 
 import com.kidcode.core.KidCodeEngine;
 import com.kidcode.core.evaluator.Evaluator;
+import com.kidcode.core.event.ExecutionEvent;
 
 import javax.swing.*;
 import java.awt.*;
@@ -84,38 +85,42 @@ public class KidCodeVisualInterpreter extends JFrame {
         setJMenuBar(menuBar);
     }
 
+    private Color parseAwtColor(String colorName) {
+        return switch (colorName.toLowerCase()) {
+            case "red" -> Color.RED;
+            case "green" -> Color.GREEN;
+            case "blue" -> Color.BLUE;
+            case "yellow" -> Color.YELLOW;
+            case "orange" -> Color.ORANGE;
+            case "purple" -> new Color(128, 0, 128);
+            case "black" -> Color.BLACK;
+            case "white" -> Color.WHITE;
+            default -> Color.BLACK;
+        };
+    }
+
     private void runCode() {
-        // Reset the state for a new run
+        String code = codeArea.getText();
+        List<ExecutionEvent> events = engine.execute(code);
         SwingUtilities.invokeLater(() -> {
+            for (ExecutionEvent event : events) {
+                if (event instanceof ExecutionEvent.ClearEvent) {
             drawingPanel.clear();
             outputArea.setText("");
-        });
-        
-        String code = codeArea.getText();
-
-        // Define the callbacks for the engine
-        final Consumer<String> onSay = message ->
-                SwingUtilities.invokeLater(() -> outputArea.append("Cody says: " + message + "\n"));
-
-        final Consumer<Evaluator.MoveEvent> onMove = event ->
-                SwingUtilities.invokeLater(() -> {
-                    // Draw a line only if Cody actually moved and pen is down
-                    if (event.isPenDown() && (event.fromX() != event.toX() || event.fromY() != event.toY())) {
-                        drawingPanel.drawLine(event.fromX(), event.fromY(), event.toX(), event.toY(), event.color());
+                } else if (event instanceof ExecutionEvent.MoveEvent e) {
+                    if (e.isPenDown() && (e.fromX() != e.toX() || e.fromY() != e.toY())) {
+                        drawingPanel.drawLine(e.fromX(), e.fromY(), e.toX(), e.toY(), parseAwtColor(e.color()));
                     }
-                    // Always update Cody's visual state (position and direction)
-                    drawingPanel.updateCodyState(event.toX(), event.toY(), event.newDirection());
-                });
-        
-        final Consumer<List<String>> onError = errors ->
-                SwingUtilities.invokeLater(() -> {
-                    outputArea.setForeground(Color.RED);
-                    errors.forEach(err -> outputArea.append(err + "\n"));
+                    drawingPanel.updateCodyState(e.toX(), e.toY(), e.newDirection());
+                } else if (event instanceof ExecutionEvent.SayEvent e) {
                     outputArea.setForeground(Color.BLACK);
-                });
-
-        // Execute the code using our new engine!
-        engine.execute(code, onSay, onMove, onError);
+                    outputArea.append("Cody says: " + e.message() + "\n");
+                } else if (event instanceof ExecutionEvent.ErrorEvent e) {
+                    outputArea.setForeground(Color.RED);
+                    outputArea.append("ERROR: " + e.errorMessage() + "\n");
+                }
+            }
+        });
     }
     
     private void openFile() {

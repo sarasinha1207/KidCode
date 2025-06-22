@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KidCode Web Interpreter</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- MONACO: Link to the Monaco loader script -->
+    <script src="https://cdn.jsdelivr.net/npm/monaco-editor@0.34.1/min/vs/loader.js"></script>
+</head>
+<body>
+    <header>
+        <h1>KidCode Web Interpreter 🎨</h1>
+    </header>
+
+    <main class="container">
+        <div class="editor-panel">
+            <div class="panel-header">
+                <h3>Code Editor</h3>
+                <button id="run-button">▶ Run</button>
+            </div>
+            <!-- MONACO: Replace textarea with a div container -->
+            <div id="editor-container" style="flex-grow: 1; border: 1px solid #e0e0e0;"></div>
+        </div>
+
+        <div class="visual-panel">
+            <div class="panel-header">
+                <h3>Cody's Canvas</h3>
+            </div>
+            <canvas id="drawing-canvas" width="500" height="500"></canvas>
+        </div>
+    </main>
+
+    <footer>
+        <div class="output-log">
+            <h3>Output Log</h3>
+            <pre id="output-area"></pre>
+        </div>
+    </footer>
+
+    <script src="app.js"></script>
+</body>
+</html> 

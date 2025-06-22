@@ -43,3 +43,7 @@ replay_pid*
 
 # Test files
 test_script.kc
+
+# KidCode test scripts (ignore outputs, not .kc files)
+test_scripts/*
+!test_scripts/*.kc

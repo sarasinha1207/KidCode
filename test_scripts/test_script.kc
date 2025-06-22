@@ -1,0 +1,42 @@
+# Comprehensive KidCode Test Script
+# This script tests all the new features
+
+# Test variables and arithmetic
+set size = 20
+set steps = 5
+
+# Test pen up/down and colors
+color "red"
+pen down
+move forward 100
+turn right 90
+
+pen up
+move forward 50  # This should not draw a line
+pen down
+
+color "green"
+move forward 100
+turn right 90
+
+# Test loops and conditionals
+repeat 4
+    if size > 15
+        say "Drawing a big shape"
+        color "blue"
+    else
+        say "Drawing a small shape"
+        color "purple"
+    end if
+    
+    move forward size
+    turn right 90
+    set size = size + 5
+end repeat
+
+# Test string concatenation
+set message = "Hello" + " " + "World"
+say message
+
+# Test final message
+say "Test completed successfully!" 

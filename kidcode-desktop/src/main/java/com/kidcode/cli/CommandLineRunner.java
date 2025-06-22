@@ -1,9 +1,11 @@
 package com.kidcode.cli;
 
 import com.kidcode.core.KidCodeEngine;
+import com.kidcode.core.event.ExecutionEvent;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.io.IOException;
+import java.util.List;
 
 public class CommandLineRunner {
     public static void main(String[] args) {
@@ -32,11 +34,17 @@ public class CommandLineRunner {
         
         System.out.println("--- Executing KidCode Script ---");
         
-        engine.execute(sourceCode,
-                (message) -> System.out.println("Cody says: " + message),
-                (event) -> System.out.println("Cody moved to (" + event.toX() + ", " + event.toY() + ")"),
-                (errors) -> errors.forEach(err -> System.err.println("ERROR: " + err))
-        );
+        List<ExecutionEvent> events = engine.execute(sourceCode);
+        
+        for (ExecutionEvent event : events) {
+            if (event instanceof ExecutionEvent.SayEvent e) {
+                System.out.println("Cody says: " + e.message());
+            } else if (event instanceof ExecutionEvent.MoveEvent e) {
+                System.out.println("Cody moved to (" + e.toX() + ", " + e.toY() + ")");
+            } else if (event instanceof ExecutionEvent.ErrorEvent e) {
+                System.err.println("ERROR: " + e.errorMessage());
+            }
+        }
         
         System.out.println("--- Script Finished ---");
     }

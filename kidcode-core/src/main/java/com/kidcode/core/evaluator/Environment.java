@@ -2,7 +2,6 @@ package com.kidcode.core.evaluator;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.awt.Color;
 import com.kidcode.core.ast.FunctionDefinitionStatement;
 
 // Holds the state of our "Cody" character.
@@ -22,7 +21,7 @@ public class Environment {
     
     // Add pen state and color tracking
     private boolean isPenDown = true;
-    private Color penColor = Color.BLUE;
+    private String penColor = "blue";
 
     // Global environment constructor
     public Environment() {
@@ -88,8 +87,8 @@ public class Environment {
     }
     
     // Color methods
-    public Color getPenColor() { return (outer != null) ? outer.getPenColor() : penColor; }
-    public void setPenColor(Color penColor) { 
+    public String getPenColor() { return (outer != null) ? outer.getPenColor() : penColor; }
+    public void setPenColor(String penColor) { 
         if (outer != null) outer.setPenColor(penColor); else { this.penColor = penColor; }
     }
 } 
