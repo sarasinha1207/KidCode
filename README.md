@@ -128,9 +128,6 @@ Contributions are welcome! Please fork, branch, and submit a pull request.
 MIT License
 
 ---
+**Happy Coding with KidCode!** 🎨✨ 
 
-<<<<<<< HEAD
-**Happy Coding with KidCode!** 🎨✨ 
-=======
-**Happy Coding with KidCode!** 🎨✨ 
 >>>>>>> b48748d (Changed the architecture of the Project : Diveded the project in three modules 'core - desktop - web')
