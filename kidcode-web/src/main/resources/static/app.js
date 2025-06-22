@@ -6,6 +6,9 @@ const editorContainer = document.getElementById('editor-container');
 const drawingCanvas = document.getElementById('drawing-canvas');
 const outputArea = document.getElementById('output-area');
 const ctx = drawingCanvas.getContext('2d');
+const helpButton = document.getElementById('help-button');
+const helpModal = document.getElementById('help-modal');
+const closeButton = document.querySelector('.close-button');
 
 // --- MONACO: Global variable to hold the editor instance ---
 let editor;
@@ -138,6 +141,26 @@ function clearCanvas() {
     ctx.strokeStyle = 'black';
     ctx.lineWidth = 2;
 }
+
+// Draw the classic pointer at (x, y) with direction (degrees) and color
+function drawCody(x, y, direction, color) {
+    ctx.save();
+    ctx.translate(x, y);
+    ctx.rotate(direction * Math.PI / 180);
+    ctx.beginPath();
+    ctx.moveTo(0, -18);   // Tip
+    ctx.lineTo(10, 7);    // Bottom right
+    ctx.lineTo(0, 0);     // Indented base center
+    ctx.lineTo(-4, 7);    // Bottom left
+    ctx.closePath();
+    ctx.fillStyle = color;
+    ctx.fill();
+    ctx.strokeStyle = 'black';
+    ctx.lineWidth = 1.5;
+    ctx.stroke();
+    ctx.restore();
+}
+
 function logToOutput(message, type = 'info') {
     const line = document.createElement('div');
     line.textContent = message;
@@ -147,23 +170,64 @@ function logToOutput(message, type = 'info') {
     }
     outputArea.appendChild(line);
 }
+
+// Store lines and Cody state for redraw
+let drawnLines = [];
+let codyState = { x: 250, y: 250, direction: 0, color: 'blue' };
+
 function renderEvents(events) {
     if (!events || events.length === 0) return;
+
     for (const event of events) {
-        if (event.errorMessage) {
-            logToOutput(`ERROR: ${event.errorMessage}`, 'error');
-        } else if (event.message) {
-            logToOutput(`Cody says: ${event.message}`);
-        } else if (event.newDirection !== undefined) {
-            if (event.isPenDown && (event.fromX !== event.toX || event.fromY !== event.toY)) {
-                ctx.beginPath();
-                ctx.moveTo(event.fromX, event.fromY);
-                ctx.lineTo(event.toX, event.toY);
-                ctx.strokeStyle = event.color;
-                ctx.stroke();
-            }
-        } else if (event.type === 'ClearEvent') {
-            // The canvas is already cleared at the start, but we could handle it here if needed.
+        switch (event.type) {
+            case 'ClearEvent':
+                drawnLines = [];
+                codyState = { x: 250, y: 250, direction: 0, color: 'blue' };
+                break;
+            case 'MoveEvent':
+                if (event.isPenDown && (event.fromX !== event.toX || event.fromY !== event.toY)) {
+                    drawnLines.push({
+                        fromX: event.fromX, fromY: event.fromY,
+                        toX: event.toX, toY: event.toY,
+                        color: event.color
+                    });
+                }
+                codyState = { x: event.toX, y: event.toY, direction: event.newDirection, color: event.color };
+                break;
+            case 'SayEvent':
+                logToOutput(`Cody says: ${event.message}`);
+                break;
+            case 'ErrorEvent':
+                logToOutput(`ERROR: ${event.errorMessage}`, 'error');
+                break;
         }
     }
-} 
+    redrawCanvas();
+}
+
+function redrawCanvas() {
+    ctx.clearRect(0, 0, drawingCanvas.width, drawingCanvas.height);
+    drawnLines.forEach(line => {
+        ctx.beginPath();
+        ctx.moveTo(line.fromX, line.fromY);
+        ctx.lineTo(line.toX, line.toY);
+        ctx.strokeStyle = line.color;
+        ctx.lineWidth = 2;
+        ctx.stroke();
+    });
+    drawCody(codyState.x, codyState.y, codyState.direction, codyState.color);
+}
+
+helpButton.addEventListener('click', () => {
+    helpModal.classList.remove('hidden');
+});
+
+closeButton.addEventListener('click', () => {
+    helpModal.classList.add('hidden');
+});
+
+window.addEventListener('click', (event) => {
+    if (event.target === helpModal) {
+        helpModal.classList.add('hidden');
+    }
+}); 

@@ -196,30 +196,28 @@ public class KidCodeVisualInterpreter extends JFrame {
         }
 
         private void drawCody(Graphics2D g2d) {
-            // Save the current graphics state (so our transformations don't affect other drawings)
             Graphics2D g2dCopy = (Graphics2D) g2d.create();
 
-            // Create a shape for Cody (a triangle pointing up)
-            // This shape is defined around the origin (0,0)
-            Polygon codyShape = new Polygon();
-            codyShape.addPoint(0, -15);  // Tip of the triangle
-            codyShape.addPoint(10, 10); // Bottom right
-            codyShape.addPoint(-10, 10);// Bottom left
-
-            // --- Perform transformations to place and rotate Cody ---
-            // a. Move the coordinate system to Cody's position
+            // Move and rotate the canvas to the pointer's position and direction.
             g2dCopy.translate(codyX, codyY);
-            // b. Rotate the coordinate system to match Cody's direction
             g2dCopy.rotate(Math.toRadians(codyDirection));
-            
-            // --- Draw the shape ---
-            // The shape is now drawn at the translated and rotated origin
-            g2dCopy.setColor(new Color(255, 100, 0)); // A nice orange color
-            g2dCopy.fill(codyShape);
-            g2dCopy.setColor(Color.BLACK);
-            g2dCopy.draw(codyShape);
 
-            // Restore the original graphics state
+            // --- Define the Classic Pointer shape using a Polygon ---
+            Polygon pointerShape = new Polygon();
+            pointerShape.addPoint(0, -18);   // The very tip (hotspot)
+            pointerShape.addPoint(10, 7);    // The bottom-right corner
+            pointerShape.addPoint(0, 0);     // The indented base center
+            pointerShape.addPoint(-4, 7);    // The bottom-left corner (closer to center for asymmetry)
+
+            // Fill the shape with a dynamic color (for now, keep orange as before)
+            g2dCopy.setColor(new Color(255, 100, 0)); // You can replace with this.codyColor if you add color support
+            g2dCopy.fill(pointerShape);
+
+            // Draw a crisp black outline
+            g2dCopy.setColor(Color.BLACK);
+            g2dCopy.setStroke(new BasicStroke(1.5f));
+            g2dCopy.draw(pointerShape);
+
             g2dCopy.dispose();
         }
 

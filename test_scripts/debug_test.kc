@@ -5,5 +5,5 @@ define test_func
         say "Hello"
     end repeat
 end define
-
+#this is a comment to check comment support in the interpreter
 test_func 

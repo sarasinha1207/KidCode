@@ -17,7 +17,10 @@
         <div class="editor-panel">
             <div class="panel-header">
                 <h3>Code Editor</h3>
-                <button id="run-button">▶ Run</button>
+                <div>
+                    <button id="help-button">Help</button>
+                    <button id="run-button">▶ Run</button>
+                </div>
             </div>
             <!-- MONACO: Replace textarea with a div container -->
             <div id="editor-container" style="flex-grow: 1; border: 1px solid #e0e0e0;"></div>
@@ -37,6 +40,44 @@
             <pre id="output-area"></pre>
         </div>
     </footer>
+
+    <div id="help-modal" class="modal hidden">
+        <div class="modal-content">
+            <span class="close-button">×</span>
+            <div id="help-docs">
+                <h2>KidCode Language Reference</h2>
+                <p>Welcome to KidCode! This guide will teach you everything you need to know to control Cody and create amazing drawings.</p>
+                <h3>1. Basic Turtle Commands</h3>
+                <table><thead><tr><th>Command</th><th>Syntax</th><th>Example</th><th>Description</th></tr></thead><tbody><tr><td><strong>Move</strong></td><td><code>move forward &lt;value&gt;</code></td><td><code>move forward 100</code></td><td>Moves Cody forward by a number of pixels.</td></tr><tr><td><strong>Turn</strong></td><td><code>turn &lt;direction&gt; &lt;value&gt;</code></td><td><code>turn right 90</code></td><td>Turns Cody to the left or right by a number of degrees.</td></tr><tr><td><strong>Say</strong></td><td><code>say &lt;value&gt;</code></td><td><code>say "Hello!"</code></td><td>Displays a message in the output log. Can be a string or a variable.</td></tr></tbody></table>
+                <h3>2. Pen and Color Control</h3>
+                <table><thead><tr><th>Command</th><th>Syntax</th><th>Example</th><th>Description</th></tr></thead><tbody><tr><td><strong>Pen</strong></td><td><code>pen &lt;up / down&gt;</code></td><td><code>pen up</code></td><td>Lifts the pen (to move without drawing) or lowers it (to draw).</td></tr><tr><td><strong>Color</strong></td><td><code>color &lt;color_name&gt;</code></td><td><code>color "red"</code></td><td>Changes the color of the pen.</td></tr></tbody></table>
+                <p><strong>Supported Colors:</strong> <code>"red"</code>, <code>"green"</code>, <code>"blue"</code>, <code>"yellow"</code>, <code>"orange"</code>, <code>"purple"</code>, <code>"black"</code>, <code>"white"</code>.</p>
+                <h3>3. Variables and Expressions</h3>
+                <h4>Variables</h4><p>Use the <code>set</code> command to create a variable and give it a value.</p><ul><li><strong>Syntax:</strong> <code>set &lt;variable_name&gt; = &lt;value&gt;</code></li><li><strong>Example:</strong> <code>set size = 50</code></li></ul>
+                <h4>Math and Logic</h4>
+                <table><thead><tr><th>Operator</th><th>Description</th><th>Example</th></tr></thead><tbody><tr><td><code>+</code></td><td>Addition / String Concatenation</td><td><code>set x = 10 + 5</code> <br> <code>say "Hello" + " World"</code></td></tr><tr><td><code>-</code></td><td>Subtraction</td><td><code>set x = 10 - 5</code></td></tr><tr><td><code>*</code></td><td>Multiplication</td><td><code>set x = 10 * 5</code></td></tr><tr><td><code>/</code></td><td>Division</td><td><code>set x = 10 / 5</code></td></tr><tr><td><code>==</code></td><td>Is Equal To</td><td><code>if x == 10</code></td></tr><tr><td><code>!=</code></td><td>Is Not Equal To</td><td><code>if x != 10</code></td></tr><tr><td><code>&gt;</code></td><td>Is Greater Than</td><td><code>if x &gt; 10</code></td></tr><tr><td><code>&lt;</code></td><td>Is Less Than</td><td><code>if x &lt; 10</code></td></tr></tbody></table>
+                <h3>4. Control Flow</h3>
+                <h4>Loops (<code>repeat</code>)</h4><pre><code>repeat &lt;times&gt;
+    # code to repeat
+end repeat</code></pre>
+                <h4>Conditionals (<code>if</code>/<code>else</code>)</h4><pre><code>if &lt;condition&gt;
+    # code
+else
+    # other code
+end if</code></pre>
+                <h3>5. Functions</h3><p>Group your code into reusable commands.</p><pre><code>define square size
+    repeat 4
+        move forward size
+        turn right 90
+    end repeat
+end define
+
+square 50</code></pre>
+                <h3>6. Lists</h3><p>Store a collection of items. Access with <code>list_name[0]</code>.</p><pre><code>set colors = ["red", "green", "blue"]
+color colors[0]</code></pre>
+            </div>
+        </div>
+    </div>
 
     <script src="app.js"></script>
 </body>
