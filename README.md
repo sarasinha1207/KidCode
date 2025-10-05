@@ -129,5 +129,3 @@ MIT License
 
 ---
 **Happy Coding with KidCode!** 🎨✨ 
-
->>>>>>> b48748d (Changed the architecture of the Project : Diveded the project in three modules 'core - desktop - web')
