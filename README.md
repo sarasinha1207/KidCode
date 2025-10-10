@@ -3,6 +3,7 @@
 **KidCode** is an educational programming language and visual interpreter designed to teach programming concepts through instant visual feedback. Control a turtle named "Cody" to draw, create patterns, and learn coding fundamentals interactively!
 
 ---
+[![An image of @sansi28's Holopin badges, which is a link to view their full Holopin profile](https://holopin.me/sansi28)](https://holopin.io/@sansi28)
 
 ## 🏗️ Project Structure (Maven Multi-Module)
 
