@@ -34,6 +34,7 @@ Clone the repository and build all modules:
 git clone https://github.com/<your-username>/KidCode.git
 cd KidCode
 mvn clean package
+```
 
 # 🧩 Contributing to KidCode
 
