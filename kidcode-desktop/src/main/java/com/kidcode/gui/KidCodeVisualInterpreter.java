@@ -11,13 +11,8 @@ import java.util.List;
 import java.util.function.Consumer;
 import org.fife.ui.rsyntaxtextarea.*;
 import org.fife.ui.rtextarea.RTextScrollPane;
-import java.awt.Color;
+
 import java.io.File;
-import javax.swing.JFileChooser;
-import javax.swing.JMenuBar;
-import javax.swing.JMenu;
-import javax.swing.JMenuItem;
-import javax.swing.JOptionPane;
 
 public class KidCodeVisualInterpreter extends JFrame {
     private final DrawingPanel drawingPanel;
