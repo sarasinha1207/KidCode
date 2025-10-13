@@ -36,44 +36,6 @@ cd KidCode
 mvn clean package
 ```
 
-# 🧩 Contributing to KidCode
-
-## 🎨 KidCode Visual Interpreter
-
-**KidCode** is an educational programming language and visual interpreter designed to teach programming concepts through instant visual feedback.  
-Control a turtle named **“Cody”** to draw, create patterns, and learn coding fundamentals interactively!
-
----
-
-## 💬 Welcome!
-
-Thanks for your interest in contributing to **KidCode**! 🌟  
-Whether you’re fixing a bug, improving documentation, or adding new features, your help makes this project better for everyone.  
-
-This guide will help you get started and understand how to contribute effectively.
-
----
-
-## 🚀 Getting Started
-
-### 🧰 Prerequisites
-
-Before contributing, make sure you have the following installed:
-
-- **Java 17+**
-- **Maven 3.8+**
-- A code editor (e.g., IntelliJ IDEA, VS Code)
-
-### 🏗️ Build the Project
-
-Clone the repository and build all modules:
-
-```bash
-git clone https://github.com/<your-username>/KidCode.git
-cd KidCode
-mvn clean package
-```
-
 ---
 
 ## 📁 Project Structure (Maven Multi-Module)
