@@ -40,7 +40,7 @@ public class Evaluator {
         if (stmt instanceof SetStatement setStmt) {
             Object value = evaluateExpression(setStmt.value(), env);
             if (isError(value)) {
-                events.add(new ExecutionEvent.SayEvent((String) value));
+                events.add(new ExecutionEvent.ErrorEvent((String) value));
             } else {
                 env.set(setStmt.name().value(), value);
             }
@@ -83,6 +83,13 @@ public class Evaluator {
             }
             env.setPenColor(colorName.toLowerCase());
             events.add(new ExecutionEvent.MoveEvent(env.getX(), env.getY(), env.getX(), env.getY(), env.getDirection(), env.isPenDown(), env.getPenColor()));
+        } else if (stmt instanceof SayStatement sayStmt) {
+            Object messageObj = evaluateExpression(sayStmt.message(), env);
+            if (isError(messageObj)) {
+                events.add(new ExecutionEvent.ErrorEvent((String) messageObj));  // Use ErrorEvent for consistency
+            } else {
+                events.add(new ExecutionEvent.SayEvent(String.valueOf(messageObj)));
+            }
         } else if (stmt instanceof RepeatStatement repeatStmt) {
             Object timesVal = evaluateExpression(repeatStmt.times(), env);
             if (!(timesVal instanceof Integer times)) {
