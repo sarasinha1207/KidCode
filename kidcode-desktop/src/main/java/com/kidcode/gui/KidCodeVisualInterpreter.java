@@ -42,14 +42,32 @@ public class KidCodeVisualInterpreter extends JFrame {
         codeArea.setCodeFoldingEnabled(true);
         codeArea.setFont(new Font("Monospaced", Font.PLAIN, 14));
         // Add some default code for testing
-        codeArea.setText("""
-                move forward 100
-                turn right 90
-                move forward 50
-                say \"Hello, Structured World!\"
-                turn left 45
-                move forward 75
-                """);
+                  codeArea.setText("""
+                  # Welcome to KidCode!
+                  # Run this code to see a rainbow spiral, then try changing it!
+                  
+                  set colors = ["red", "orange", "yellow", "green", "blue", "purple"]
+                  set length = 5
+                  set color_index = 0
+                  
+                  # Repeat many times to make a large spiral
+                  repeat 75
+                      # Set the color from the list
+                      color colors[color_index]
+                      
+                      move forward length
+                      turn right 60
+                      
+                      # Get ready for the next line
+                      set length = length + 2
+                      set color_index = color_index + 1
+                      
+                      # Reset color index to loop through the rainbow
+                      if color_index == 6
+                          set color_index = 0
+                      end if
+                  end repeat
+                  """);
         RTextScrollPane codeScrollPane = new RTextScrollPane(codeArea);
         controlPanel.add(codeScrollPane, BorderLayout.CENTER);
 
