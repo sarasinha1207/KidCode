@@ -37,7 +37,7 @@ public class KidCodeVisualInterpreter extends JFrame {
         codeArea.setCodeFoldingEnabled(true);
         codeArea.setFont(new Font("Monospaced", Font.PLAIN, 14));
         // Add some default code for testing
-                  codeArea.setText("""
+         codeArea.setText("""
                   # Welcome to KidCode!
                   # Run this code to see a rainbow spiral, then try changing it!
                   
