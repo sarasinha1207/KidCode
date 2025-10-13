@@ -127,7 +127,7 @@ public class Evaluator {
         };
     }
 
-    private Object evaluateExpression(Expression expr, Environment env) {
+    Object evaluateExpression(Expression expr, Environment env) {
         if (expr instanceof IntegerLiteral i) {
             return i.value();
         }
@@ -146,8 +146,13 @@ public class Evaluator {
             if (isError(left)) return left;
             Object right = evaluateExpression(infix.right(), env);
             if (isError(right)) return right;
+            // If either side is a string, only allow + for concatenation. Other
+            // operators should be reported as errors (e.g., "Hello" * 2 is invalid).
             if (left instanceof String || right instanceof String) {
-                return String.valueOf(left) + String.valueOf(right);
+                if ("+".equals(infix.operator())) {
+                    return String.valueOf(left) + String.valueOf(right);
+                }
+                return "Error: Cannot use '" + infix.operator() + "' with a string.";
             }
             if (left instanceof Integer l && right instanceof Integer r) {
                 return switch (infix.operator()) {
