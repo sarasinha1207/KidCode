@@ -1,0 +1,45 @@
+# .coderabbit.yaml
+# Configuration file for the CodeRabbit AI code reviewer.
+# For all configuration options, see the official docs: https://www.coderabbit.ai/docs/configuration
+
+# Set the primary language of the project. This helps the AI provide more accurate feedback.
+language: "java"
+
+# --- Pull Request Review Settings ---
+reviews:
+  # When 'true', CodeRabbit will automatically review new pull requests.
+  # If 'false', you must manually trigger reviews with the "@coderabbitai review" command.
+  enabled: true
+
+  # The message "Auto reviews are disabled on base/target branches other than the default branch"
+  # is a common default setting. If you want CodeRabbit to review pull requests
+  # targeting branches other than 'main' or 'master', you may need to configure it here
+  # or in the CodeRabbit UI. The following is a common way to do it.
+  # (Uncomment and adjust to your needs)
+  #
+  # branches:
+  #  include:
+  #    - "main"
+  #    - "develop"
+  #    - "feature/**" # Reviews PRs from any feature branch
+
+  # Disable the status message mentioned in your log.
+  # When 'true', CodeRabbit posts a status message like "Review skipped...".
+  # Setting this to 'false' will stop those messages from appearing.
+  review_status: false
+
+  # You can exclude certain files or directories from being reviewed.
+  # This is useful for documentation, test data, or generated files.
+  paths:
+    exclude:
+      - "**/*.md"              # Exclude all Markdown files
+      - "**/test_scripts/**"    # Exclude all example scripts
+      - ".coderabbit.yaml"      # Exclude the config file itself
+      - "Dockerfile"
+
+# --- Command Settings ---
+# Configure which "@coderabbitai" commands are available in PR comments.
+commands:
+  # Allow manual reviews to be triggered by commenting "@coderabbitai review" on a PR.
+  # This is useful even if automatic reviews are enabled.
+  review: true
