@@ -50,36 +50,51 @@ require.config({ paths: { 'vs': 'https://cdn.jsdelivr.net/npm/monaco-editor@0.34
 require(['vs/editor/editor.main'], function() {
     registerKidCodeLanguage();
 
-    editor = monaco.editor.create(editorContainer, {
-        value: [
-            '# Welcome to KidCode!',
-            '# Try changing the code below.',
-            '',
-            'define star side',
-            '    repeat 5',
-            '        move forward side',
-            '        turn right 144',
-            '    end repeat',
-            'end define',
-            '',
-            'color "orange"',
-            'star 100',
-            '',
-            'pen up',
-            'move forward 150',
-            'pen down',
-            '',
-            'color "purple"',
-            'star 50',
-            '',
-            'say "Done!"'
-        ].join('\n'),
-        language: 'kidcode',
-        theme: 'vs-light',
-        automaticLayout: true,
-        fontSize: 14,
-        minimap: { enabled: false }
-    });
+        editor = monaco.editor.create(editorContainer, {
+            value: [
+                '# Welcome to KidCode!',
+                '# Try changing the code below.',
+                '',
+                'define star side',
+                '    repeat 5',
+                '        move forward side',
+                '        turn right 144',
+                '    end repeat',
+                'end define',
+                '',
+                'color "orange"',
+                'star 100',
+                '',
+                'pen up',
+                'move forward 150',
+                'pen down',
+                '',
+                'color "purple"',
+                'star 50',
+                '',
+                'say "Done!"'
+            ].join('\n'),
+            language: 'kidcode',
+            theme: 'vs-light',
+            automaticLayout: true,
+            fontSize: 14,
+            minimap: { enabled: false }
+        });
+
+        // Add an editor action / keybinding so Ctrl/Cmd+Enter triggers the Run button
+        editor.addAction({
+            id: 'kidcode.run',
+            label: 'Run KidCode (Ctrl/Cmd+Enter)',
+            keybindings: [
+                monaco.KeyMod.CtrlCmd | monaco.KeyCode.Enter
+            ],
+            precondition: null,
+            keybindingContext: null,
+            run: function(ed) {
+                runButton.click();
+                return null;
+            }
+        });
 
     // MONACO: Live validation
     editor.onDidChangeModelContent(() => {
