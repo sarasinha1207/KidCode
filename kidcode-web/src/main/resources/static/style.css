@@ -47,7 +47,6 @@ h3 {
   color: #34495e;
 }
 
-/* ✨ Animated Button Base */
 .animated-btn {
   display: inline-flex;
   align-items: center;
@@ -68,7 +67,6 @@ h3 {
   animation: fadeInUp 0.8s ease forwards;
 }
 
-/* 🟢 Run Button – Gradient + Animated Shine */
 .run-btn {
   background: linear-gradient(145deg, #27ae60 0%, #1e8449 100%);
   color: #fff;
@@ -111,7 +109,6 @@ h3 {
   box-shadow: 0 3px 6px rgba(39, 174, 96, 0.2);
 }
 
-/* 🔵 Help Button – Balanced Visibility */
 .help-btn {
   background-color: #fdfefe;
   color: #3498db;
@@ -154,7 +151,7 @@ h3 {
   box-shadow: 0 3px 6px rgba(52, 152, 219, 0.25);
 }
 
-/* 🎯 Font Awesome Icon Styling */
+/* Font Awesome Icon Styling */
 .button-icon {
   font-size: 1.15rem;
   line-height: 1;
@@ -182,20 +179,19 @@ h3 {
   color: #fefefe;
 }
 
-/* 🌿 Space Between Buttons */
+/* Space Between Buttons */
 .panel-header > div {
   display: flex;
   align-items: center;
   gap: 14px;
 }
 
-/* ✨ Fade-in animation */
+/* Fade-in animation */
 @keyframes fadeInUp {
   0% { opacity: 0; transform: translateY(10px); }
   100% { opacity: 1; transform: translateY(0); }
 }
 
-/* 🎨 Editor and Other Layout Styles */
 #code-editor {
   flex-grow: 1;
   border: none;
