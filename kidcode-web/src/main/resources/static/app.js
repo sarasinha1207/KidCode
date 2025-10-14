@@ -10,6 +10,9 @@ const helpButton = document.getElementById('help-button');
 const helpModal = document.getElementById('help-modal');
 const closeButton = document.querySelector('.close-button');
 
+// --- Key for browser's local storage ---
+const KIDCODE_STORAGE_KEY = 'kidcode.savedCode';
+
 // --- MONACO: Global variable to hold the editor instance ---
 let editor;
 let validationTimeout;
@@ -50,8 +53,9 @@ require.config({ paths: { 'vs': 'https://cdn.jsdelivr.net/npm/monaco-editor@0.34
 require(['vs/editor/editor.main'], function() {
     registerKidCodeLanguage();
 
-        editor = monaco.editor.create(editorContainer, {
-                    value: [
+        // --- Load code from localStorage or use default ---
+        const savedCode = localStorage.getItem(KIDCODE_STORAGE_KEY);
+        const defaultCode = [
             '# Welcome to KidCode!',
             '# Run this code to see a rainbow spiral, then try changing it!',
             '',
@@ -76,7 +80,10 @@ require(['vs/editor/editor.main'], function() {
             '        set color_index = 0',
             '    end if',
             'end repeat'
-        ].join('\n'),
+        ].join('\n');
+
+        editor = monaco.editor.create(editorContainer, {
+            value: savedCode !== null ? savedCode : defaultCode,
             language: 'kidcode',
             theme: 'vs-light',
             automaticLayout: true,
@@ -99,8 +106,12 @@ require(['vs/editor/editor.main'], function() {
             }
         });
 
-    // MONACO: Live validation
+    // MONACO: Live validation and auto-saving
     editor.onDidChangeModelContent(() => {
+        // Save the current code to local storage
+        localStorage.setItem(KIDCODE_STORAGE_KEY, editor.getValue());
+
+        // Debounce validation
         clearTimeout(validationTimeout);
         validationTimeout = setTimeout(validateCode, 500);
     });
