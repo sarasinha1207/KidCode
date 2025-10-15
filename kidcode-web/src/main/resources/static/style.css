@@ -95,15 +95,10 @@ header {
   box-shadow: 0 0 4px rgba(52, 152, 219, 0.3);
 }
 
-/* 🖲️ Right side: Buttons stay aligned */
 .panel-controls {
   display: flex;
   align-items: center;
   gap: 14px;
-}
-
-/* Ensure controls don't wrap and keep their size */
-.panel-controls {
   flex-shrink: 0;
   white-space: nowrap;
 }

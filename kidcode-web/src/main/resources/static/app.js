@@ -13,6 +13,7 @@ const closeButton = document.querySelector(".close-button");
 // --- MONACO: Global variable to hold the editor instance ---
 let editor;
 let validationTimeout;
+let validationController;
 
 // --- MONACO: Function to define and register our custom language ---
 function registerKidCodeLanguage() {
@@ -48,14 +49,14 @@ function registerKidCodeLanguage() {
             },
           },
         ],
-        [/\d+/, "number"],
+        [/-?\d+(?:\.\d+)?/, "number"], // supports decimals & negatives
         [/#.*$/, "comment"],
         [/"([^"\\]|\\.)*$/, "string.invalid"],
         [/"/, { token: "string.quote", bracket: "@open", next: "@string" }],
       ],
       string: [
         [/[^\\"]+/, "string"],
-        [/\\./, "string.escape.invalid"],
+        [/\\./, "string.escape"], // valid generic escapes
         [/"/, { token: "string.quote", bracket: "@close", next: "@pop" }],
       ],
     },
@@ -160,17 +161,24 @@ function initializeExamples() {
 // --- 2. ADD EVENT LISTENER TO THE RUN BUTTON ---
 runButton.addEventListener("click", async () => {
   const code = editor.getValue();
+
+  // 🧹 Ensure a clean slate even if backend omits ClearEvent
+  drawnLines = [];
+  codyState = { x: 250, y: 250, direction: 0, color: "blue" };
   clearCanvas();
   outputArea.textContent = "";
+
   try {
     const response = await fetch("/api/execute", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ code: code }),
+      body: JSON.stringify({ code }),
     });
+
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
+
     const events = await response.json();
     renderEvents(events);
   } catch (error) {
@@ -181,24 +189,47 @@ runButton.addEventListener("click", async () => {
 // --- NEW: Function to handle validation ---
 async function validateCode() {
   const code = editor.getValue();
+
+  // Cancel any in-flight validation to prevent stale results
+  if (validationController) {
+    validationController.abort();
+  }
+  const controller = new AbortController();
+  validationController = controller;
+
   try {
     const response = await fetch("/api/validate", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ code: code }),
+      body: JSON.stringify({ code }),
+      signal: controller.signal,
     });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error ${response.status}`);
+    }
+
     const errors = await response.json();
-    const markers = errors.map((err) => ({
-      message: err.message,
-      severity: monaco.MarkerSeverity.Error,
-      startLineNumber: err.lineNumber,
-      endLineNumber: err.lineNumber,
-      startColumn: 1,
-      endColumn: 100,
-    }));
-    monaco.editor.setModelMarkers(editor.getModel(), "kidcode", markers);
+    const model = editor.getModel();
+    const markers = (Array.isArray(errors) ? errors : []).map((err) => {
+      const line = Number(err.lineNumber) > 0 ? Number(err.lineNumber) : 1;
+      const endCol = model ? model.getLineMaxColumn(line) : 100;
+      return {
+        message: String(err.message || "Syntax error"),
+        severity: monaco.MarkerSeverity.Error,
+        startLineNumber: line,
+        endLineNumber: line,
+        startColumn: 1,
+        endColumn: endCol,
+      };
+    });
+
+    monaco.editor.setModelMarkers(model, "kidcode", markers);
   } catch (error) {
+    if (error.name === "AbortError") return; // ignore outdated requests
     console.error("Validation request failed:", error);
+  } finally {
+    if (validationController === controller) validationController = null;
   }
 }
 
@@ -262,14 +293,14 @@ function renderEvents(events) {
             fromY: event.fromY,
             toX: event.toX,
             toY: event.toY,
-            color: event.color,
+            color: event.color ?? codyState.color,
           });
         }
         codyState = {
           x: event.toX,
           y: event.toY,
           direction: event.newDirection,
-          color: event.color,
+          color: event.color ?? codyState.color,
         };
         break;
       case "SayEvent":
