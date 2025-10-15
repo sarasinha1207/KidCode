@@ -108,6 +108,10 @@ public class KidCodeVisualInterpreter extends JFrame {
             case "purple" -> new Color(128, 0, 128);
             case "black" -> Color.BLACK;
             case "white" -> Color.WHITE;
+            case "cyan" -> Color.CYAN;
+            case "magenta" -> Color.MAGENTA;
+            case "pink" -> Color.PINK;
+            case "brown" -> new Color(139, 69, 19);
             default -> Color.BLACK;
         };
     }

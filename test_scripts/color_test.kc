@@ -1,0 +1,11 @@
+color "pink"
+move forward 100
+turn right 90
+color "cyan"
+move forward 100
+turn right 90
+color "magenta"
+move forward 100
+turn right 90
+color "brown"
+move forward 100

@@ -129,7 +129,8 @@ public class Evaluator {
 
     private boolean isSupportedColor(String colorName) {
         return switch (colorName.toLowerCase()) {
-            case "red", "green", "blue", "yellow", "orange", "purple", "black", "white" -> true;
+            case "red", "green", "blue", "yellow", "orange", "purple", "black", "white",
+                 "cyan", "magenta", "pink", "brown" -> true;
             default -> false;
         };
     }
