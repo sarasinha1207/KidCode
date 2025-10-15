@@ -100,10 +100,6 @@ header {
   display: flex;
   align-items: center;
   gap: 14px;
-}
-
-/* Ensure controls don't wrap and keep their size */
-.panel-controls {
   flex-shrink: 0;
   white-space: nowrap;
 }
