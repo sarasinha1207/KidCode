@@ -1,3 +1,4 @@
+# Test script demonstrating the four new colors
 color "pink"
 move forward 100
 turn right 90
@@ -9,3 +10,4 @@ move forward 100
 turn right 90
 color "brown"
 move forward 100
+turn right 90
