@@ -66,6 +66,7 @@ function registerKidCodeLanguage() {
 require.config({
   paths: { vs: "https://cdn.jsdelivr.net/npm/monaco-editor@0.34.1/min/vs" },
 });
+
 require(["vs/editor/editor.main"], function () {
   registerKidCodeLanguage();
 
@@ -103,33 +104,8 @@ require(["vs/editor/editor.main"], function () {
     minimap: { enabled: false },
   });
 
-  // ✅ Dynamically populate dropdown safely
-  const selector = document.getElementById("exampleSelector");
-
-  if (!window.examples) {
-    console.error("examples.js failed to load or window.examples is undefined");
-    logToOutput(
-      "⚠️ examples.js not loaded — please check your file setup.",
-      "error"
-    );
-    return;
-  }
-
-  Object.keys(window.examples).forEach((exampleName) => {
-    const option = document.createElement("option");
-    option.value = exampleName;
-    option.textContent = exampleName;
-    selector.appendChild(option);
-  });
-
-  // ✅ NEW: Load example into editor when selected
-  selector.addEventListener("change", () => {
-    const selected = selector.value;
-    if (window.examples && window.examples[selected]) {
-      editor.setValue(window.examples[selected]);
-      logToOutput(`✅ Loaded example: ${selected}`);
-    }
-  });
+  // ✅ Safely initialize examples dropdown without breaking editor setup
+  initializeExamples();
 
   // Add an editor action / keybinding so Ctrl/Cmd+Enter triggers the Run button
   editor.addAction({
@@ -149,6 +125,37 @@ require(["vs/editor/editor.main"], function () {
   });
   validateCode();
 });
+
+// --- Initialize example dropdown (gracefully degrades if examples.js missing) ---
+function initializeExamples() {
+  const selector = document.getElementById("exampleSelector");
+  if (!selector) {
+    console.error("Example selector element not found");
+    return;
+  }
+
+  if (!window.examples) {
+    console.warn("examples.js not loaded - example selector disabled");
+    selector.disabled = true;
+    selector.innerHTML = '<option value="">Examples unavailable</option>';
+    return;
+  }
+
+  Object.keys(window.examples).forEach((exampleName) => {
+    const option = document.createElement("option");
+    option.value = exampleName;
+    option.textContent = exampleName;
+    selector.appendChild(option);
+  });
+
+  selector.addEventListener("change", () => {
+    const selected = selector.value;
+    if (window.examples[selected]) {
+      editor.setValue(window.examples[selected]);
+      logToOutput(`✅ Loaded example: ${selected}`);
+    }
+  });
+}
 
 // --- 2. ADD EVENT LISTENER TO THE RUN BUTTON ---
 runButton.addEventListener("click", async () => {
