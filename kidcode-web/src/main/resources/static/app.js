@@ -104,7 +104,18 @@ require(["vs/editor/editor.main"], function () {
   });
 
   // ✅ Dynamically populate dropdown
+  // ✅ Dynamically populate dropdown safely
   const selector = document.getElementById("exampleSelector");
+
+  if (!window.examples) {
+    console.error("examples.js failed to load or window.examples is undefined");
+    logToOutput(
+      "⚠️ examples.js not loaded — please check your file setup.",
+      "error"
+    );
+    return;
+  }
+
   Object.keys(window.examples).forEach((exampleName) => {
     const option = document.createElement("option");
     option.value = exampleName;
