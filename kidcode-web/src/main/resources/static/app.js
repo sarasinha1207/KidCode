@@ -9,6 +9,8 @@ const ctx = drawingCanvas.getContext('2d');
 const helpButton = document.getElementById('help-button');
 const helpModal = document.getElementById('help-modal');
 const closeButton = document.querySelector('.close-button');
+const downloadButton = document.getElementById('download-btn');
+
 
 // --- Key for browser's local storage ---
 const KIDCODE_STORAGE_KEY = 'kidcode.savedCode';
@@ -138,6 +140,23 @@ runButton.addEventListener('click', async () => {
         logToOutput(`Network or server error: ${error.message}`, 'error');
     }
 });
+
+// --- NEW: Event listener for Download button ---
+if (downloadButton) {
+    downloadButton.addEventListener('click', () => {
+        try {
+            const imageURL = drawingCanvas.toDataURL('image/png');
+            const link = document.createElement('a');
+            link.href = imageURL;
+            link.download = 'CodyDrawing.png';
+            link.click();
+            logToOutput('Drawing exported as CodyDrawing.png');
+        } catch (err) {
+            logToOutput(`Failed to export drawing: ${err.message}`, 'error');
+        }
+    });
+}
+
 
 // --- NEW: Function to handle validation ---
 async function validateCode() {
