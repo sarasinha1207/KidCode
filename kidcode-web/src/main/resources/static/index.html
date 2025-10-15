@@ -4,13 +4,13 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>KidCode Web Interpreter</title>
-    <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="style.css?v=2" />
     <link
-    rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
-    integrity="sha512-6UkeuJ+JSTasDIXhVFMz+yTQq5j0KiG2Zs0hV3uOJwMsqZs1XUy3JvRlq9s6C1q8PBA0qL/jY1TRf9bA2wD9kg=="
-    crossorigin="anonymous"
-    referrerpolicy="no-referrer"
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+      integrity="sha512-6UkeuJ+JSTasDIXhVFMz+yTQq5j0KiG2Zs0hV3uOJwMsqZs1XUy3JvRlq9s6C1q8PBA0qL/jY1TRf9bA2wD9kg=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
     />
     <!-- MONACO: Link to the Monaco loader script -->
     <script src="https://cdn.jsdelivr.net/npm/monaco-editor@0.34.1/min/vs/loader.js"></script>
@@ -23,21 +23,29 @@
     <main class="container">
       <div class="editor-panel">
         <div class="panel-header">
-          <h3>Code Editor</h3>
-          <div>
+          <div class="panel-left">
+            <h3>Code Editor</h3>
+            <div class="example-selector-wrapper">
+              <select id="exampleSelector" aria-label="Choose Example">
+                <option value="">Select an Example</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="panel-controls">
             <button id="help-button" class="animated-btn help-btn">
-                    <span class="button-icon"><i class="fa-solid fa-circle-info"></i></span> Help
-                    </button>
+              <span class="button-icon"
+                ><i class="fa-solid fa-circle-info"></i
+              ></span>
+              Help
+            </button>
 
             <button id="run-button" class="animated-btn run-btn">
-                    <span class="button-icon"><i class="fa-solid fa-play"></i></span> Run
-                    </button>
+              <span class="button-icon"><i class="fa-solid fa-play"></i></span>
+              Run
+            </button>
           </div>
         </div>
-        <!-- MONACO: Replace textarea with a div container -->
-        <select id="exampleSelector">
-          <option value="">Select an Example</option>
-        </select>
 
         <div
           id="editor-container"

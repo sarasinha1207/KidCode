@@ -103,7 +103,6 @@ require(["vs/editor/editor.main"], function () {
     minimap: { enabled: false },
   });
 
-  // ✅ Dynamically populate dropdown
   // ✅ Dynamically populate dropdown safely
   const selector = document.getElementById("exampleSelector");
 
