@@ -66,6 +66,12 @@ public class KidCodeVisualInterpreter extends JFrame {
         RTextScrollPane codeScrollPane = new RTextScrollPane(codeArea);
         controlPanel.add(codeScrollPane, BorderLayout.CENTER);
 
+         outputArea = new JTextArea(5, 30);
+        outputArea.setEditable(false);
+        JScrollPane outputScrollPane = new JScrollPane(outputArea);
+        add(outputScrollPane, BorderLayout.SOUTH);
+
+
         JPanel buttonPanel = new JPanel(new FlowLayout());
         JButton runButton = new JButton("Run Code");
         runButton.addActionListener(e -> new Thread(this::runCode).start());
@@ -73,15 +79,31 @@ public class KidCodeVisualInterpreter extends JFrame {
         JButton stopButton = new JButton("Stop");
         stopButton.addActionListener(e -> engine.stopExecution());
         buttonPanel.add(stopButton);
+
+
+        // First confirm then perform the operation. (Because it can be risky for the user if clicks by chance.)
+   JButton clearButton = new JButton("Clear");
+clearButton.addActionListener(e -> {
+    int confirm = JOptionPane.showConfirmDialog(
+        this,
+        "Are you sure you want to clear the code, output, and drawing?", 
+        "Confirm Clear",
+        JOptionPane.YES_NO_OPTION
+    );
+    if (confirm == JOptionPane.YES_OPTION) {
+        codeArea.setText("# Welcome to KidCode! \n");       // Clear the code area
+        outputArea.setText("");     // Clear the output area
+        drawingPanel.clear();       // Clear the drawing canvas
+    }
+});
+buttonPanel.add(clearButton);
+
+
         controlPanel.add(buttonPanel, BorderLayout.SOUTH);
 
         add(controlPanel, BorderLayout.WEST);
 
-        outputArea = new JTextArea(5, 30);
-        outputArea.setEditable(false);
-        JScrollPane outputScrollPane = new JScrollPane(outputArea);
-        add(outputScrollPane, BorderLayout.SOUTH);
-
+       
         // Add menu bar
         JMenuBar menuBar = new JMenuBar();
         JMenu fileMenu = new JMenu("File");
