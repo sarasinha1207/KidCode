@@ -22,7 +22,7 @@ public class KidCodeVisualInterpreter extends JFrame {
 
     public KidCodeVisualInterpreter() {
         this.engine = new KidCodeEngine();
-
+        
         setTitle("KidCode Visual Interpreter");
         setSize(1000, 700);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -37,39 +37,34 @@ public class KidCodeVisualInterpreter extends JFrame {
         codeArea.setCodeFoldingEnabled(true);
         codeArea.setFont(new Font("Monospaced", Font.PLAIN, 14));
         // Add some default code for testing
-        codeArea.setText("""
-                # Welcome to KidCode!
-                # Run this code to see a rainbow spiral, then try changing it!
-
-                set colors = ["red", "orange", "yellow", "green", "blue", "purple"]
-                set length = 5
-                set color_index = 0
-
-                # Repeat many times to make a large spiral
-                repeat 75
-                    # Set the color from the list
-                    color colors[color_index]
-
-                    move forward length
-                    turn right 60
-
-                    # Get ready for the next line
-                    set length = length + 2
-                    set color_index = color_index + 1
-
-                    # Reset color index to loop through the rainbow
-                    if color_index == 6
-                        set color_index = 0
-                    end if
-                end repeat
-                """);
+         codeArea.setText("""
+                  # Welcome to KidCode!
+                  # Run this code to see a rainbow spiral, then try changing it!
+                  
+                  set colors = ["red", "orange", "yellow", "green", "blue", "purple"]
+                  set length = 5
+                  set color_index = 0
+                  
+                  # Repeat many times to make a large spiral
+                  repeat 75
+                      # Set the color from the list
+                      color colors[color_index]
+                      
+                      move forward length
+                      turn right 60
+                      
+                      # Get ready for the next line
+                      set length = length + 2
+                      set color_index = color_index + 1
+                      
+                      # Reset color index to loop through the rainbow
+                      if color_index == 6
+                          set color_index = 0
+                      end if
+                  end repeat
+                  """);
         RTextScrollPane codeScrollPane = new RTextScrollPane(codeArea);
         controlPanel.add(codeScrollPane, BorderLayout.CENTER);
-
-        outputArea = new JTextArea(5, 30);
-        outputArea.setEditable(false);
-        JScrollPane outputScrollPane = new JScrollPane(outputArea);
-        add(outputScrollPane, BorderLayout.SOUTH);
 
         JPanel buttonPanel = new JPanel(new FlowLayout());
         JButton runButton = new JButton("Run Code");
@@ -78,40 +73,27 @@ public class KidCodeVisualInterpreter extends JFrame {
         JButton stopButton = new JButton("Stop");
         stopButton.addActionListener(e -> engine.stopExecution());
         buttonPanel.add(stopButton);
-
-        // First confirm then perform the operation. (Because it can be risky for the
-        // user if clicks by chance.)
-        JButton clearButton = new JButton("Clear");
-        clearButton.addActionListener(e -> {
-            int confirm = JOptionPane.showConfirmDialog(
-                    this,
-                    "Are you sure you want to clear the code, output, and drawing?",
-                    "Confirm Clear",
-                    JOptionPane.YES_NO_OPTION);
-            if (confirm == JOptionPane.YES_OPTION) {
-                codeArea.setText(""); // Clear the code area
-                outputArea.setText(""); // Clear the output area
-                drawingPanel.clear(); // Clear the drawing canvas
-            }
-        });
-        buttonPanel.add(clearButton);
-
         controlPanel.add(buttonPanel, BorderLayout.SOUTH);
 
         add(controlPanel, BorderLayout.WEST);
 
+        outputArea = new JTextArea(5, 30);
+        outputArea.setEditable(false);
+        JScrollPane outputScrollPane = new JScrollPane(outputArea);
+        add(outputScrollPane, BorderLayout.SOUTH);
+
         // Add menu bar
         JMenuBar menuBar = new JMenuBar();
         JMenu fileMenu = new JMenu("File");
-
+        
         JMenuItem openItem = new JMenuItem("Open...");
         openItem.addActionListener(e -> openFile());
         fileMenu.add(openItem);
-
+        
         JMenuItem saveItem = new JMenuItem("Save As...");
         saveItem.addActionListener(e -> saveFile());
         fileMenu.add(saveItem);
-
+        
         menuBar.add(fileMenu);
         setJMenuBar(menuBar);
     }
@@ -136,8 +118,8 @@ public class KidCodeVisualInterpreter extends JFrame {
         SwingUtilities.invokeLater(() -> {
             for (ExecutionEvent event : events) {
                 if (event instanceof ExecutionEvent.ClearEvent) {
-                    drawingPanel.clear();
-                    outputArea.setText("");
+            drawingPanel.clear();
+            outputArea.setText("");
                 } else if (event instanceof ExecutionEvent.MoveEvent e) {
                     if (e.isPenDown() && (e.fromX() != e.toX() || e.fromY() != e.toY())) {
                         drawingPanel.drawLine(e.fromX(), e.fromY(), e.toX(), e.toY(), parseAwtColor(e.color()));
@@ -153,15 +135,14 @@ public class KidCodeVisualInterpreter extends JFrame {
             }
         });
     }
-
+    
     private void openFile() {
         JFileChooser chooser = new JFileChooser();
         if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
             try {
                 codeArea.setText(new String(java.nio.file.Files.readAllBytes(chooser.getSelectedFile().toPath())));
             } catch (Exception e) {
-                JOptionPane.showMessageDialog(this, "Error opening file: " + e.getMessage(), "Error",
-                        JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Error opening file: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             }
         }
     }
@@ -172,12 +153,11 @@ public class KidCodeVisualInterpreter extends JFrame {
             try {
                 java.nio.file.Files.write(chooser.getSelectedFile().toPath(), codeArea.getText().getBytes());
             } catch (Exception e) {
-                JOptionPane.showMessageDialog(this, "Error saving file: " + e.getMessage(), "Error",
-                        JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Error saving file: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             }
         }
     }
-
+    
     // --- Inner classes from your original file ---
     static class DrawingPanel extends JPanel {
         private final List<Line> lines = new ArrayList<>();
@@ -237,10 +217,10 @@ public class KidCodeVisualInterpreter extends JFrame {
 
             // --- Define the Classic Pointer shape using a Polygon ---
             Polygon pointerShape = new Polygon();
-            pointerShape.addPoint(0, -18); // The very tip (hotspot)
-            pointerShape.addPoint(10, 7); // The bottom-right corner
-            pointerShape.addPoint(0, 0); // The indented base center
-            pointerShape.addPoint(-4, 7); // The bottom-left corner (closer to center for asymmetry)
+            pointerShape.addPoint(0, -18);   // The very tip (hotspot)
+            pointerShape.addPoint(10, 7);    // The bottom-right corner
+            pointerShape.addPoint(0, 0);     // The indented base center
+            pointerShape.addPoint(-4, 7);    // The bottom-left corner (closer to center for asymmetry)
 
             // Fill the shape with a dynamic color (for now, keep orange as before)
             g2dCopy.setColor(new Color(255, 100, 0)); // You can replace with this.codyColor if you add color support
@@ -257,18 +237,13 @@ public class KidCodeVisualInterpreter extends JFrame {
         static class Line {
             int x1, y1, x2, y2;
             Color color;
-
             Line(int x1, int y1, int x2, int y2, Color color) {
-                this.x1 = x1;
-                this.y1 = y1;
-                this.x2 = x2;
-                this.y2 = y2;
-                this.color = color;
+                this.x1 = x1; this.y1 = y1; this.x2 = x2; this.y2 = y2; this.color = color;
             }
         }
     }
-
+    
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> new KidCodeVisualInterpreter().setVisible(true));
     }
-}
+} 
