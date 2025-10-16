@@ -127,24 +127,14 @@ public class Evaluator {
         }
     }
 
-    /**
-     * Checks if the given color name is supported by KidCode.
-     * 
-     * @param colorName the color name to check (case-insensitive)
-     * @return true if the color is supported, false otherwise
-     */
     private boolean isSupportedColor(String colorName) {
-        if (colorName == null) {
-            return false;
-        }
         return switch (colorName.toLowerCase()) {
-            case "red", "green", "blue", "yellow", "orange", "purple", "black", "white",
-                 "cyan", "magenta", "pink", "brown" -> true;
+            case "red", "green", "blue", "yellow", "orange", "purple", "black", "white" -> true;
             default -> false;
         };
     }
 
-    Object evaluateExpression(Expression expr, Environment env) {
+    private Object evaluateExpression(Expression expr, Environment env) {
         if (expr instanceof IntegerLiteral i) {
             return i.value();
         }
@@ -163,13 +153,8 @@ public class Evaluator {
             if (isError(left)) return left;
             Object right = evaluateExpression(infix.right(), env);
             if (isError(right)) return right;
-            // If either side is a string, only allow + for concatenation. Other
-            // operators should be reported as errors (e.g., "Hello" * 2 is invalid).
             if (left instanceof String || right instanceof String) {
-                if ("+".equals(infix.operator())) {
-                    return String.valueOf(left) + String.valueOf(right);
-                }
-                return "Error: Cannot use '" + infix.operator() + "' with a string.";
+                return String.valueOf(left) + String.valueOf(right);
             }
             if (left instanceof Integer l && right instanceof Integer r) {
                 return switch (infix.operator()) {
@@ -215,7 +200,7 @@ public class Evaluator {
         }
         return "Error: Cannot evaluate expression";
     }
-    
+
     private boolean isError(Object obj) {
         return obj instanceof String s && s.startsWith("Error:");
     }
@@ -245,4 +230,3 @@ public class Evaluator {
             evaluateStatement(bodyStmt, localEnv);
         }
     }
-}
