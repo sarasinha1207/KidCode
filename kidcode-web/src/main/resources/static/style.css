@@ -34,12 +34,90 @@ header {
   flex-direction: column;
 }
 
+/* 🧩 Panel header layout */
+
+/* Panel header: keep title, dropdown and controls on a single row */
 .panel-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 10px 20px;
   border-bottom: 1px solid #e0e0e0;
+  flex-wrap: nowrap; /* prevent the controls from dropping to the next line */
+  gap: 12px;
+}
+
+/* 🧭 Left side: Code Editor title + Dropdown */
+.panel-left {
+  display: flex;
+  align-items: center;
+  gap: 6px; /* compact spacing between title and dropdown */
+  flex-wrap: nowrap; /* ensure title and dropdown stay together */
+}
+
+/* 🎨 Dropdown and label */
+.example-selector-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* Ensure the heading aligns vertically with the select */
+.panel-left h3 {
+  margin: 0;
+  line-height: 36px; /* match #exampleSelector height */
+  font-size: 1.05rem;
+}
+
+.example-selector-wrapper label {
+  font-weight: 600;
+  color: #2c3e50;
+  font-size: 15px;
+  margin: 0;
+}
+
+#exampleSelector {
+  padding: 8px 12px;
+  font-size: 14px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  background-color: #fff;
+  color: #333;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  outline: none;
+  height: 36px;
+}
+
+#exampleSelector:hover,
+#exampleSelector:focus {
+  border-color: #3498db;
+  box-shadow: 0 0 4px rgba(52, 152, 219, 0.3);
+}
+
+/* 🖲️ Right side: Buttons stay aligned */
+.panel-controls {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+/* 🔒 Hidden but accessible label */
+.sr-only {
+  /* Accessible visually-hidden utility: keeps content available for
+     screen readers but removes it visually across browsers. */
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0 0 0 0) !important;
+  clip-path: inset(50%) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
 }
 
 h3 {
@@ -180,6 +258,7 @@ h3 {
 }
 
 /* Space Between Buttons */
+
 .panel-header > div {
   display: flex;
   align-items: center;
@@ -312,8 +391,10 @@ footer {
 }
 
 #help-docs th {
-  background-color: #f2f2f2;
-}
+    background-color: #f2f2f2;
+} 
+
+
 
 #download-btn {
   background: linear-gradient(145deg, #f39c12 0%, #e67e22 100%);
