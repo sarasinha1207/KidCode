@@ -204,23 +204,6 @@ runButton.addEventListener("click", async () => {
   }
 });
 
-// --- 2️⃣ Event listener for Download button ---
-if (downloadButton) {
-  downloadButton.addEventListener("click", () => {
-    try {
-      // Export the current canvas as an image
-      const imageURL = drawingCanvas.toDataURL("image/png");
-      const link = document.createElement("a");
-      link.href = imageURL;
-      link.download = "CodyDrawing.png";
-      link.click();
-      logToOutput("✅ Drawing exported as CodyDrawing.png");
-    } catch (err) {
-      logToOutput(`❌ Failed to export drawing: ${err.message}`, "error");
-    }
-  });
-}
-
 // --- NEW: Event listener for Download button ---
 if (downloadButton) {
   downloadButton.addEventListener("click", () => {
