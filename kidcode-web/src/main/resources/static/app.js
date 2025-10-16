@@ -74,9 +74,6 @@ require.config({
 require(["vs/editor/editor.main"], function () {
   registerKidCodeLanguage();
 
-  // --- Load code from localStorage or use default ---
-  const KIDCODE_STORAGE_KEY = "kidcode_saved_code";
-
   const savedCode = localStorage.getItem(KIDCODE_STORAGE_KEY);
   const defaultCode = [
     "# Welcome to KidCode!",
@@ -115,11 +112,6 @@ require(["vs/editor/editor.main"], function () {
     minimap: { enabled: false },
   });
 
-  // ✅ Save editor content automatically when user types
-  editor.onDidChangeModelContent(() => {
-    localStorage.setItem(KIDCODE_STORAGE_KEY, editor.getValue());
-  });
-
   // ✅ Safely initialize examples dropdown (non-blocking)
   initializeExamples();
 
@@ -143,6 +135,7 @@ require(["vs/editor/editor.main"], function () {
     clearTimeout(validationTimeout);
     validationTimeout = setTimeout(validateCode, 500);
   });
+  // Validate on initial load
   validateCode();
 });
 
