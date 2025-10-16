@@ -9,6 +9,10 @@ const ctx = drawingCanvas.getContext("2d");
 const helpButton = document.getElementById("help-button");
 const helpModal = document.getElementById("help-modal");
 const closeButton = document.querySelector(".close-button");
+const downloadButton = document.getElementById("download-btn");
+
+// --- Key for browser's local storage ---
+const KIDCODE_STORAGE_KEY = "kidcode.savedCode";
 
 // --- MONACO: Global variable to hold the editor instance ---
 let editor;
@@ -70,33 +74,40 @@ require.config({
 require(["vs/editor/editor.main"], function () {
   registerKidCodeLanguage();
 
+  // --- Load code from localStorage or use default ---
+  const KIDCODE_STORAGE_KEY = "kidcode_saved_code";
+
+  const savedCode = localStorage.getItem(KIDCODE_STORAGE_KEY);
+  const defaultCode = [
+    "# Welcome to KidCode!",
+    "# Run this code to see a rainbow spiral, then try changing it!",
+    "",
+    'set colors = ["red", "orange", "yellow", "green", "blue", "purple"]',
+    "set length = 5",
+    "set color_index = 0",
+    "",
+    "# Repeat many times to make a large spiral",
+    "repeat 75",
+    "    # Set the color from the list",
+    "    color colors[color_index]",
+    "",
+    "    move forward length",
+    "    turn right 60",
+    "",
+    "    # Get ready for the next line",
+    "    set length = length + 2",
+    "    set color_index = color_index + 1",
+    "",
+    "    # Reset color index to loop through the rainbow",
+    "    if color_index == 6",
+    "        set color_index = 0",
+    "    end if",
+    "end repeat",
+  ].join("\n");
+
+  // --- Create the Monaco Editor ---
   editor = monaco.editor.create(editorContainer, {
-    value: [
-      "# Welcome to KidCode!",
-      "# Run this code to see a rainbow spiral, then try changing it!",
-      "",
-      'set colors = ["red", "orange", "yellow", "green", "blue", "purple"]',
-      "set length = 5",
-      "set color_index = 0",
-      "",
-      "# Repeat many times to make a large spiral",
-      "repeat 75",
-      "    # Set the color from the list",
-      "    color colors[color_index]",
-      "    ",
-      "    move forward length",
-      "    turn right 60",
-      "    ",
-      "    # Get ready for the next line",
-      "    set length = length + 2",
-      "    set color_index = color_index + 1",
-      "    ",
-      "    # Reset color index to loop through the rainbow",
-      "    if color_index == 6",
-      "        set color_index = 0",
-      "    end if",
-      "end repeat",
-    ].join("\n"),
+    value: savedCode !== null ? savedCode : defaultCode,
     language: "kidcode",
     theme: "vs-light",
     automaticLayout: true,
@@ -104,7 +115,12 @@ require(["vs/editor/editor.main"], function () {
     minimap: { enabled: false },
   });
 
-  // ✅ Safely initialize examples dropdown without breaking editor setup
+  // ✅ Save editor content automatically when user types
+  editor.onDidChangeModelContent(() => {
+    localStorage.setItem(KIDCODE_STORAGE_KEY, editor.getValue());
+  });
+
+  // ✅ Safely initialize examples dropdown (non-blocking)
   initializeExamples();
 
   // Add an editor action / keybinding so Ctrl/Cmd+Enter triggers the Run button
@@ -118,8 +134,12 @@ require(["vs/editor/editor.main"], function () {
     },
   });
 
-  // Monaco live validation
+  // Monaco live validation and auto-saving
   editor.onDidChangeModelContent(() => {
+    // Save the current code to local storage
+    localStorage.setItem(KIDCODE_STORAGE_KEY, editor.getValue());
+
+    // Debounce validation
     clearTimeout(validationTimeout);
     validationTimeout = setTimeout(validateCode, 500);
   });
@@ -158,25 +178,64 @@ function initializeExamples() {
 }
 
 // --- 2. ADD EVENT LISTENER TO THE RUN BUTTON ---
+// --- 1️⃣ Event listener for Run button ---
 runButton.addEventListener("click", async () => {
   const code = editor.getValue();
+
+  // ✅ Always start with a fresh canvas before execution
   clearCanvas();
   outputArea.textContent = "";
+
   try {
     const response = await fetch("/api/execute", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ code: code }),
+      body: JSON.stringify({ code }),
     });
+
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
+
     const events = await response.json();
     renderEvents(events);
   } catch (error) {
     logToOutput(`Network or server error: ${error.message}`, "error");
   }
 });
+
+// --- 2️⃣ Event listener for Download button ---
+if (downloadButton) {
+  downloadButton.addEventListener("click", () => {
+    try {
+      // Export the current canvas as an image
+      const imageURL = drawingCanvas.toDataURL("image/png");
+      const link = document.createElement("a");
+      link.href = imageURL;
+      link.download = "CodyDrawing.png";
+      link.click();
+      logToOutput("✅ Drawing exported as CodyDrawing.png");
+    } catch (err) {
+      logToOutput(`❌ Failed to export drawing: ${err.message}`, "error");
+    }
+  });
+}
+
+// --- NEW: Event listener for Download button ---
+if (downloadButton) {
+  downloadButton.addEventListener("click", () => {
+    try {
+      const imageURL = drawingCanvas.toDataURL("image/png");
+      const link = document.createElement("a");
+      link.href = imageURL;
+      link.download = "CodyDrawing.png";
+      link.click();
+      logToOutput("Drawing exported as CodyDrawing.png");
+    } catch (err) {
+      logToOutput(`Failed to export drawing: ${err.message}`, "error");
+    }
+  });
+}
 
 // --- NEW: Function to handle validation ---
 async function validateCode() {

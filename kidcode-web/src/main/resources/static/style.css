@@ -395,3 +395,28 @@ footer {
 } 
 
 
+
+#download-btn {
+  background: linear-gradient(145deg, #f39c12 0%, #e67e22 100%);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  padding: 10px 20px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 4px 8px rgba(243, 156, 18, 0.25);
+  transition: all 0.25s ease;
+}
+
+#download-btn:hover {
+  background: linear-gradient(145deg, #f1c40f 0%, #f39c12 100%);
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 6px 14px rgba(241, 196, 15, 0.35);
+}
+
+#download-btn:active {
+  background: linear-gradient(145deg, #d68910 0%, #b9770e 100%);
+  transform: translateY(0) scale(0.98);
+  box-shadow: 0 3px 6px rgba(243, 156, 18, 0.2);
+}
+
